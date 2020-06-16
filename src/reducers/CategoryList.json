@@ -1,0 +1,22 @@
+[
+    {
+        "id": 0,
+        "title": "Beauty Products",
+        "Description": "Any kind of beauty products like make up, lotion...."
+    },
+    {
+        "id": 1,
+        "title": "Fashion",
+        "Description": "Any kind of fashion products like make up, lotion...."
+    },
+    {
+        "id": 2,
+        "title": "Clothing",
+        "Description": "Any kind of clothing - kids, Adults...."
+    },
+    {
+        "id": 3,
+        "title": "Foot Wear",
+        "Description": "Any kind of shoes, boots, slippers...."
+    }
+]

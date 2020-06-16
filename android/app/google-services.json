@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "603367597747",
+    "firebase_url": "https://viralmarket-c2abe.firebaseio.com",
+    "project_id": "viralmarket-c2abe",
+    "storage_bucket": "viralmarket-c2abe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603367597747:android:9d8d8dcfe7194202c472c6",
+        "android_client_info": {
+          "package_name": "com.viralmarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603367597747-ledppnk1tar4bg0991jj8jeqjem61l0h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.viralmarket",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "603367597747-dvvruf79m3hr63qt058obqjjs7l8lrh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAspTFfHSdwT_bvTRZ_Gq6P3cPJMvQDWAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603367597747-dvvruf79m3hr63qt058obqjjs7l8lrh2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
