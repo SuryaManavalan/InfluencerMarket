@@ -28,14 +28,16 @@ export const loginUser= ({email, password}) => {
                 loginUserSuccess(dispatch,user)  })
             .catch((error) =>{ 
                 console.log("login error", error)
-                auth().createUserWithEmailAndPassword(email, password)
-                .then (user => {loginUserSuccess(dispatch,user)})
-                .catch((error) =>{ 
-                    //console.log("login create error", error);
-                    loginUserFail(dispatch);
-                })
-    
+                loginUserFail(dispatch);
             });
+    }
+};
+
+export const signupUser= ({email, password}) => {
+    return (dispatch) => {
+        dispatch({type: LOGIN_USER_LOAD});
+        auth().createUserWithEmailAndPassword(email, password)
+        .then (user => {loginUserSuccess(dispatch,user)})
     }
 };
 
@@ -44,11 +46,11 @@ const loginUserFail= (dispatch)=>{
         type: LOGIN_USER_FAIL
     });
 }
+
 const loginUserSuccess= (dispatch, user) => {
     console.log("login success");
     dispatch({type: LOGIN_USER_SUCCESS,
         payload: user});
     
     Actions.campaign();
-
 }

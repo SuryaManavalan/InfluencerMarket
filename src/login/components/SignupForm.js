@@ -2,49 +2,35 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Actions } from 'react-native-router-flux'
 import {Card, CardSection, Input, Spinner, Button} from '../../components/common';
-import {emailChanged, passwordChanged, loginUser} from '../actions';
+import {emailChanged, passwordChanged, signupUser} from '../actions';
 import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, TextInput} from 'react-native';
 
-class LoginForm extends Component {
+class SignupForm extends Component {
     onEmailChange(text){
         this.props.emailChanged(text);
-        // console.log("email change1:", text);
-        // console.log("email change:", this.props.email);
     }
 
     onPasswordChange(text){
         this.props.passwordChanged(text);
-        // console.log("pswd  press1:", text);
-        // console.log("pswd  press:", this.props.password);
     } 
 
     onButtonPress(){
         const {email, password} = this.props;
-        console.log("button press:", email);
-        this.props.loginUser({email, password});
+        this.props.signupUser({email, password});
     }
-
-    renderButton() {
-        if(this.props.loading){
-            return <Spinner size="large" />
-        }
-        return (
-            <Button onPress={this.onButtonPress.bind(this)}>
-                Login
-            </Button>
-        )
-    }
-
-    toSignup(){
-        Actions.signup();
+    
+    toSignin(){
+        Actions.login();
     }
 
     renderError(){
         if(this.props.error){
             return (
-                    <Text style={{textAlign: 'center', color: 'rgb(193, 119, 103)'}}>
+                <View style={{backgroundColor: 'white'}}>
+                    <Text style={{color:'red'}}>
                         {this.props.error}
                     </Text>
+                </View>
             )
         }
     }
@@ -56,10 +42,9 @@ class LoginForm extends Component {
                         <Image style={styles.logo}
                             source={require('../logo.png')}>
                         </Image>
-                        <Text style={styles.title}>Sign In</Text>
+                        <Text style={styles.title}>Sign Up</Text>
                     </View>
                     <View style={styles.infoContainer}>
-                        {this.renderError()}
                         <TextInput style={styles.input}
                             placeholder="Email"
                             placeholderTextColor='rgba(225,225,225,0.8)'
@@ -81,9 +66,9 @@ class LoginForm extends Component {
                             value={this.props.password}
                         />
                         <TouchableOpacity onPress={this.onButtonPress.bind(this)} style={styles.buttonContainer}>
-                            <Text style={styles.buttonText}>Sign In</Text>
+                            <Text style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
-                        <Text style={styles.bottomText}>Don't Have an account? <Text onPress={()=> this.toSignup()} style = {{ fontStyle: 'bold' }}>Sign Up.</Text></Text>
+                        <Text style={styles.bottomText}>Already have an account? <Text onPress={()=> this.toSignin()} style = {{ fontStyle: 'bold' }}>Sign In.</Text></Text>
                     </View>
             </KeyboardAvoidingView>
         )
@@ -111,7 +96,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        height: 285,
+        height: 270,
         padding: 20,
         // backgroundColor: 'red'
     },
@@ -166,4 +151,4 @@ const mapStateToProps = state => {
     }
 } 
 
-export default connect(mapStateToProps, {emailChanged, passwordChanged, loginUser})(LoginForm);
+export default connect(mapStateToProps, {emailChanged, passwordChanged, signupUser})(SignupForm);

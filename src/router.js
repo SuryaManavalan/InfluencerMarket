@@ -1,6 +1,7 @@
 import React from 'react';
 import {Scene, Router, Actions } from 'react-native-router-flux';
 import LoginForm from './login/components/LoginForm'
+import SignupForm from './login/components/SignupForm'
 import CampaignList from './campaignMgmt/components/campaignList';
 import CampaignCreate from './campaignMgmt/components/campaignCreate';
 import CampaignEdit from './campaignMgmt/components/campaignEdit';
@@ -11,6 +12,7 @@ const RouterComponent = () => {
             <Scene key="root" hideNavBar >
                 <Scene key="auth">
                     <Scene key="login" hideNavBar component={LoginForm}/>
+                    <Scene key="signup" hideNavBar component={SignupForm}/>
                 </Scene>
                 <Scene key="campaign">
                     <Scene key="campaignList" component={CampaignList}
