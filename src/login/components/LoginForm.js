@@ -83,7 +83,7 @@ class LoginForm extends Component {
                         <TouchableOpacity onPress={this.onButtonPress.bind(this)} style={styles.buttonContainer}>
                             <Text style={styles.buttonText}>Sign In</Text>
                         </TouchableOpacity>
-                        <Text style={styles.bottomText}>Don't Have an account? <Text onPress={()=> this.toSignup()} style = {{ fontStyle: 'bold' }}>Sign Up.</Text></Text>
+                        <Text style={styles.bottomText}>Don't Have an account? <Text onPress={()=> this.toSignup()} style = {{ fontWeight: 'bold' }}>Sign Up.</Text></Text>
                     </View>
             </KeyboardAvoidingView>
         )
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: 0, 
         height: 285,
         padding: 20,
         // backgroundColor: 'red'
