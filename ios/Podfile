@@ -79,6 +79,8 @@ target 'ViralMarket' do
 
   pod 'RNCPicker', :path => '../node_modules/@react-native-community/picker'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'ViralMarketTests' do
     inherit! :complete
     # Pods for testing
