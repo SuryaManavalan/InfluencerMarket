@@ -2,7 +2,8 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import {Actions } from 'react-native-router-flux'
 import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE, CAMPAIGN_CREATE_SUCCESS,
-     CAMPAIGN_CREATE_FAIL, CAMPAIGN_CAT_LIST, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT} from '../types'
+     CAMPAIGN_CREATE_FAIL, CAMPAIGN_CAT_LIST, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
+     CAMPAIGN_SEARCH_SUCCESS} from '../types'
 
     export const campaignUpdate = ({prop, value}) =>{
         console.log("action:************", prop)
@@ -49,13 +50,16 @@ import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE, C
 export const campaignCreate= ( {campaignName, campaignDesc, campaignMobile,
     campaignDiscount,  campaignCategory} )  => {
 
+       const  nameKeywords = generateKeywords(campaignName);
+
         return (dispatch) => {
             dispatch({type: CAMPAIGN_CREATE});
             firestore().collection('campaigns')
                 .add({
                     name: campaignName,
                     description: campaignDesc,
-                    categoryName: campaignCategory
+                    categoryName: campaignCategory,
+                    nameKeywords: nameKeywords
                 })
                 .then(data => {
                     campaignCreateSuccess(dispatch,data)  })
@@ -64,6 +68,38 @@ export const campaignCreate= ( {campaignName, campaignDesc, campaignMobile,
                 });
         }
 };
+
+const createKeywords = name => {
+    console.log("keyword name", name)
+    const arrName = [];
+    let curName = '';
+ 
+    name.split('').forEach(letter => {
+        curName += letter;
+        arrName.push(curName);
+    });
+    name.split(' ').forEach(word => {
+        let curName2 = '';
+        word.split('').forEach(letter2 => {
+            curName2 += letter2;
+            arrName.push(curName2);
+        });
+    });
+
+    return arrName;
+  }
+  
+  
+  const generateKeywords = name => {
+    const keywordName = createKeywords(name);
+
+     return [
+      ...new Set([
+        '',
+        ...keywordName
+      ])
+    ];
+  }
 
 export const campaignCreateFail= (dispatch, error)=>{
     console.log("Campaign create error", error);
@@ -108,6 +144,7 @@ export const campaignEdit= ( {campaignKey, campaignName, campaignDesc, campaignM
                 });
         }
     }
+    
 export const campaignDelete= ( campaignKey)  => {
 
         console.log("***camp del :", campaignKey);
@@ -125,3 +162,53 @@ export const campaignDelete= ( campaignKey)  => {
         }
 }
 
+
+export  const campaignSearch= (searchTerm)=>{
+    console.log("Campaign Search", searchTerm);
+
+    return (dispatch) => {
+        const campaignSearchList = [];
+//        dispatch({type: CAMPAIGN_SEARCH});
+//         firestore().collection('campaigns')
+//             .onSnapshot(querySnapshot => {
+//                 const campaignSearchList = [];
+// //                    console.log("CAMPAIGN_SEARCH2", campaignSearchList);
+
+//                 querySnapshot.forEach(documentSnapshot => {
+//                     campaignSearchList.push({
+//                     ...documentSnapshot.data(),
+//                     key: documentSnapshot.id,
+//                   });
+//                 })
+        const querySnapshot = firestore().collection('campaigns')
+            .where('nameKeywords', 'array-contains', searchTerm.toLowerCase());
+            
+        console.log("after qs");
+
+        querySnapshot.get()
+        .then(documentSnapshot => {
+            console.log("in qs", documentSnapshot);
+
+            documentSnapshot.docs.forEach(doc => {
+                campaignSearchList.push({
+                    ...doc.data()});
+                console.log("doc data", doc.data());
+              })
+
+        //     campaignSearchList.push({
+        //     ...documentSnapshot.data(),
+        //     key: documentSnapshot.id,
+        //})
+          console.log("CAMPAIGN_SEARCH2", campaignSearchList);
+          dispatch({type: CAMPAIGN_SEARCH_SUCCESS,
+              payload: campaignSearchList});
+
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+          });
+
+//            });
+    };
+}
+    
