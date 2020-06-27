@@ -3,7 +3,7 @@ import firestore, { firebase } from '@react-native-firebase/firestore';
 import {Actions } from 'react-native-router-flux'
 import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE, CAMPAIGN_CREATE_SUCCESS,
      CAMPAIGN_CREATE_FAIL, CAMPAIGN_CAT_LIST, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
-     CAMPAIGN_SEARCH_SUCCESS} from '../types'
+     CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT} from '../types'
 
     export const campaignUpdate = ({prop, value}) =>{
         console.log("action:************", prop)
@@ -162,24 +162,19 @@ export const campaignDelete= ( campaignKey)  => {
         }
 }
 
+export const campaignSearchInit = () =>{
+    console.log("campaignSearchInit:************")
+    return {
+        type: CAMPAIGN_SEARCH_INIT,
+        payload: {}
+    };
+};
 
 export  const campaignSearch= (searchTerm)=>{
     console.log("Campaign Search", searchTerm);
 
     return (dispatch) => {
         const campaignSearchList = [];
-//        dispatch({type: CAMPAIGN_SEARCH});
-//         firestore().collection('campaigns')
-//             .onSnapshot(querySnapshot => {
-//                 const campaignSearchList = [];
-// //                    console.log("CAMPAIGN_SEARCH2", campaignSearchList);
-
-//                 querySnapshot.forEach(documentSnapshot => {
-//                     campaignSearchList.push({
-//                     ...documentSnapshot.data(),
-//                     key: documentSnapshot.id,
-//                   });
-//                 })
         const querySnapshot = firestore().collection('campaigns')
             .where('nameKeywords', 'array-contains', searchTerm.toLowerCase());
             
