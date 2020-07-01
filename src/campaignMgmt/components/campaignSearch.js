@@ -3,6 +3,7 @@ import { ActivityIndicator, Text, View,  ScrollView } from 'react-native';
 import {connect} from 'react-redux';
 import {SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import {campaignSearch} from '../actions';
+import {campaignSearchInit} from '../actions';
 import SearchBar from '../../components/common/SearchBar';
 import ResultsList from './resultsList.js';
 
@@ -11,24 +12,29 @@ import ResultsList from './resultsList.js';
 class CampaignSearch extends Component {
 
   state = {searchTerm: ''};
+
+  componentDidMount() {
+    console.log("Search  Mount:");
+    this.props.campaignSearchInit();
+  }
   
-      render(){
+  render(){
 
-        console.log("in search comp", this.props.campaignSearchList);
-        return (
-          <>
-            <SearchBar searchTerm={this.state.searchTerm} 
-            onSearchTermChange={ newSearchTerm => this.setState({searchTerm: newSearchTerm}) 
-          }
-            onSearchTermSubmit={ () => this.props.campaignSearch(this.state.searchTerm)}
-            />
-
-            <SafeAreaView style={styles.container}>
-              <ResultsList filteredResults={this.props.campaignSearchList} title="Campaigns" />
-            </SafeAreaView>
-        </>
-        ); 
+    console.log("in search comp", this.props.campaignSearchList);
+    return (
+      <>
+        <SearchBar searchTerm={this.state.searchTerm} 
+        onSearchTermChange={ newSearchTerm => this.setState({searchTerm: newSearchTerm}) 
       }
+        onSearchTermSubmit={ () => this.props.campaignSearch(this.state.searchTerm)}
+        />
+
+        <SafeAreaView style={styles.container}>
+          <ResultsList filteredResults={this.props.campaignSearchList} title="Campaigns" />
+        </SafeAreaView>
+    </>
+    ); 
+  }
 }
 
 
@@ -57,4 +63,4 @@ const mapStateToProps = (state) => {
 }
 
   // export default CampaignList;
-  export default connect(mapStateToProps, {campaignSearch}) (CampaignSearch);
+  export default connect(mapStateToProps, {campaignSearchInit, campaignSearch}) (CampaignSearch);
