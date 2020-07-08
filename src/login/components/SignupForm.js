@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
 import { Card, CardSection, Input, Spinner, Button } from '../../components/common';
-import { emailChanged, passwordChanged, signupUser } from '../actions';
+import { emailChanged, passwordChanged, signupUser, typeUpdate } from '../actions';
+import {Picker} from '@react-native-community/picker';
 import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, TextInput, CheckBox } from 'react-native';
-
 class SignupForm extends Component {
 
     onEmailChange(text) {
@@ -17,15 +17,15 @@ class SignupForm extends Component {
 
     onButtonPress() {
         const { email, password, usertype } = this.props;
-        this.props.signupUser({ email, password, usertype});
+        this.props.signupUser({ email, password, usertype });
     }
 
     toSignin() {
         Actions.login();
     }
 
-    setToggleCheckBox(value){
-        this.props.usertype = value
+    onChangeCheck() {
+        this.setState({ usertype: !this.props.usertype })
     }
 
     renderError() {
@@ -41,7 +41,6 @@ class SignupForm extends Component {
     }
 
     render() {
-        const toggleCheckBox = false
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <View style={styles.logoContainer}>
@@ -73,12 +72,14 @@ class SignupForm extends Component {
                         value={this.props.password}
                     />
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <CheckBox
-                            center
-                            value={toggleCheckBox}
-                            onValueChange={() => this.setToggleCheckBox.bind(toggleCheckBox)}
-                        />
-                        <Text style={{ color: 'white',fontSize: 17, marginBottom: 15 }}>Influencer</Text>
+                        <Picker
+                            style={{ flex: 1, color: 'white'}}
+                            selectedValue={this.props.usertype}
+                            onValueChange={value => this.props.typeUpdate(value)}>
+                            <Picker.Item label="Influencer" value="influencer" />
+                            <Picker.Item label="Company" value="company" />
+                        </Picker>
+                        {this.renderError()}
                     </View>
                     <TouchableOpacity onPress={this.onButtonPress.bind(this)} style={styles.buttonContainer}>
                         <Text style={styles.buttonText}>Sign Up</Text>
@@ -168,4 +169,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, signupUser })(SignupForm);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, signupUser, typeUpdate})(SignupForm);

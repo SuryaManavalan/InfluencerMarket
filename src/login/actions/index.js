@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux'
 import {
     EMAIL_CHANGED, PASSWORD_CHANGED,
     LOGIN_USER_SUCCESS, LOGIN_USER_FAIL,
-    LOGIN_USER_LOAD, TYPE_ADD_FAIL, TYPE_ADD_SUCCESS
+    LOGIN_USER_LOAD, TYPE_ADD_FAIL, TYPE_ADD_SUCCESS, TYPE_UPDATE
 } from '../types'
 
 export const emailChanged = (text) => {
@@ -18,6 +18,13 @@ export const emailChanged = (text) => {
 export const passwordChanged = (text) => {
     return {
         type: PASSWORD_CHANGED,
+        payload: text
+    };
+};
+
+export const typeUpdate = (text) =>{
+    return {
+        type: TYPE_UPDATE,
         payload: text
     };
 };
@@ -41,44 +48,51 @@ export const signupUser = ({ email, password, usertype }) => {
     return (dispatch) => {
         dispatch({ type: LOGIN_USER_LOAD });
         auth().createUserWithEmailAndPassword(email, password)
-            .then(user => { loginUserSuccess(dispatch, user) })
-        if (usertype) {
-            firestore().collection('influencers')
-                .add({
-                    //UID: user.UID,
-                    email: email,
-                    password: password
-                }).then(data => {
-                    typeAddSuccess(dispatch, data)
-                })
-                .catch((error) => {
-                    typeAddFail(dispatch);
-                });
-        } else if (!usertype) {
-            firestore().collection('companies')
-                .add({
-                    //UID: user.UID,
-                    email: email,
-                    password: password
-                }).then(data => {
-                    typeAddSuccess(dispatch, data)
-                })
-                .catch((error) => {
-                    typeAddFail(dispatch);
-                });
-        }
+            .then(user => {
+                loginUserSuccess(dispatch, user)
+                if (usertype == "influencer") {
+                    firestore().collection('influencers')
+                        .add({
+                            //UID: user.UID,
+                            email: email,
+                            password: password
+                        }).then(data => {
+                            typeAddSuccess(dispatch, data)
+                        })
+                        .catch((error) => {
+                            typeAddFail(dispatch);
+                        });
+                } else if (usertype == "company") {
+                    firestore().collection('companies')
+                        .add({
+                            //UID: user.UID,
+                            email: email,
+                            password: password
+                        }).then(data => {
+                            typeAddSuccess(dispatch, data)
+                        })
+                        .catch((error) => {
+                            typeAddFail(dispatch);
+                        });
+                }
+            }).catch((error) => {
+                console.log("signup error", error)
+                loginUserFail(dispatch);
+            });
     }
 };
 
-export const typeAddFail= (dispatch)=>{
+export const typeAddFail = (dispatch) => {
     dispatch({
         type: TYPE_ADD_FAIL
     });
 }
 
-export const typeAddSuccess= (dispatch, data) => {
-    dispatch({type: TYPE_ADD_SUCCESS,
-        payload: data});
+export const typeAddSuccess = (dispatch, data) => {
+    dispatch({
+        type: TYPE_ADD_SUCCESS,
+        payload: data
+    });
 }
 
 const loginUserFail = (dispatch) => {
