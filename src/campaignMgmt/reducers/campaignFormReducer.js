@@ -13,15 +13,15 @@ const INITIAL_STATE= {
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log("reducer:", action.value);
-    console.log("reducer:", action.payload);
+//    console.log("reducer:", action.value);
+//    console.log("reducer:", action.payload);
     
     switch (action.type) {
         case CAMPAIGN_UPDATE:
-            console.log("in update");
+//            console.log("in update");
             return {...state, [action.payload.prop]: action.payload.value};
         case CAMPAIGN_CREATE_INIT:
-            console.log("in CAMPAIGN_CREATE_INIT:")
+//            console.log("in CAMPAIGN_CREATE_INIT:")
             return {...state, ...INITIAL_STATE};
         case CAMPAIGN_CREATE_SUCCESS:
 //            console.log("in CAMPAIGN_CREATE_SUCCESS:", action.payload)

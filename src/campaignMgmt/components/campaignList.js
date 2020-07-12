@@ -10,7 +10,7 @@ import ResultsList from './resultsList.js';
 
 class CampaignList extends Component {
   componentDidMount() {
-    console.log("comp WILLLLL MOUNT");
+    console.log("comp WILLLLL MOUNT", this.props.navigation);
     this.props.campaignCatList();
 
   }
@@ -27,9 +27,9 @@ class CampaignList extends Component {
         console.log("in list comp", this.props.campaignList);
         return (
           <SafeAreaView style={styles.container}>
-            <ResultsList filteredResults={this.props.campaignList} title="Category 1" />
-            <ResultsList filteredResults={this.props.campaignList} title="Category 1" />
-            <ResultsList filteredResults={this.props.campaignList} title="Category 1" />
+            <ResultsList filteredResults={this.props.campaignList} navigation={this.props.navigation} title="Category 1" />
+            <ResultsList filteredResults={this.props.campaignList}  navigation={this.props.navigation} title="Category 1" />
+            <ResultsList filteredResults={this.props.campaignList}  navigation={this.props.navigation} title="Category 1" />
           </SafeAreaView>
 
         ); 

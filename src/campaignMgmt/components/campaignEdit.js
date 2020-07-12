@@ -15,8 +15,9 @@ class CampaignEdit extends Component {
       }
 
     componentDidMount() {
-        console.log("willmount:", this.props.selectedCampaign);
-        _.each(this.props.selectedCampaign, (value, prop) => {
+        const { navigation, route } = this.props;
+    //    console.log("Edit willmount:", route.params.selectedCampaign);
+        _.each(route.params.selectedCampaign, (value, prop) => {
             if(prop === "name") prop = "campaignName";
             if(prop === "description") prop = "campaignDesc";
             if(prop === "name") prop = "categoryName";
