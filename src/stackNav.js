@@ -6,6 +6,7 @@ import {  Appbar, Avatar, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 import CampaignEdit from './campaignMgmt/components/campaignEdit';
 import CampaignList from './campaignMgmt/components/campaignList';
+import {BottomTabs} from './bottomTab';
 
 //import { StackNavigatorParamlist } from './types';
 
@@ -71,7 +72,7 @@ export const StackNavigator = () => {
     >
       <Stack.Screen
         name="CampaignList"
-        component={CampaignList}
+        component={BottomTabs}
         options={{ headerTitle: 'Campaign List' }}
       />
       <Stack.Screen
