@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Actions } from 'react-native-router-flux'
 import {Card, CardSection, Input, Spinner, Button} from '../../components/common';
-import {emailChanged, passwordChanged, loginUser} from '../actions';
+import {emailChanged, passwordChanged, loginUser, resetError} from '../actions';
 import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, TextInput} from 'react-native';
 
 class LoginForm extends Component {
@@ -19,9 +19,11 @@ class LoginForm extends Component {
     } 
 
     onButtonPress(){
-        const {email, password} = this.props;
-        console.log("button press:", email);
-        this.props.loginUser({email, password});
+        if (this.props.email != '' && this.props.password != ''){
+            const {email, password} = this.props;
+            console.log("button press:", email);
+            this.props.loginUser({email, password});
+        }
     }
 
     renderButton() {
@@ -36,13 +38,14 @@ class LoginForm extends Component {
     }
 
     toSignup(){
+        this.props.resetError();
         Actions.signup();
     }
 
     renderError(){
         if(this.props.error){
             return (
-                    <Text style={{textAlign: 'center', color: 'rgb(193, 119, 103)'}}>
+                    <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold'}}>
                         {this.props.error}
                     </Text>
             )
@@ -166,4 +169,4 @@ const mapStateToProps = state => {
     }
 } 
 
-export default connect(mapStateToProps, {emailChanged, passwordChanged, loginUser})(LoginForm);
+export default connect(mapStateToProps, {emailChanged, passwordChanged, loginUser, resetError})(LoginForm);

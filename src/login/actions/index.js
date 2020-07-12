@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux'
 import {
     EMAIL_CHANGED, PASSWORD_CHANGED,
     LOGIN_USER_SUCCESS, LOGIN_USER_FAIL,
-    LOGIN_USER_LOAD, TYPE_ADD_FAIL, TYPE_ADD_SUCCESS, TYPE_UPDATE
+    LOGIN_USER_LOAD, SIGNUP_USER_FAIL, TYPE_ADD_FAIL, TYPE_ADD_SUCCESS, TYPE_UPDATE, RESET_ERROR
 } from '../types'
 
 export const emailChanged = (text) => {
@@ -53,9 +53,8 @@ export const signupUser = ({ email, password, usertype }) => {
                 if (usertype == "influencer") {
                     firestore().collection('influencers')
                         .add({
-                            //UID: user.UID,
+                            UID: auth().currentUser.uid,
                             email: email,
-                            password: password
                         }).then(data => {
                             typeAddSuccess(dispatch, data)
                         })
@@ -65,9 +64,8 @@ export const signupUser = ({ email, password, usertype }) => {
                 } else if (usertype == "company") {
                     firestore().collection('companies')
                         .add({
-                            //UID: user.UID,
+                            UID: auth().currentUser.uid,
                             email: email,
-                            password: password
                         }).then(data => {
                             typeAddSuccess(dispatch, data)
                         })
@@ -77,10 +75,16 @@ export const signupUser = ({ email, password, usertype }) => {
                 }
             }).catch((error) => {
                 console.log("signup error", error)
-                loginUserFail(dispatch);
+                signupUserFail(dispatch);
             });
     }
 };
+
+export const resetError = () => {
+    return{
+        type: RESET_ERROR
+    };
+}
 
 export const typeAddFail = (dispatch) => {
     dispatch({
@@ -98,6 +102,12 @@ export const typeAddSuccess = (dispatch, data) => {
 const loginUserFail = (dispatch) => {
     dispatch({
         type: LOGIN_USER_FAIL
+    });
+}
+
+const signupUserFail = (dispatch) => {
+    dispatch({
+        type: SIGNUP_USER_FAIL
     });
 }
 
