@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import {StackNavigator} from './stackNav';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginForm from './login/components/LoginForm'
+import SignupForm from './login/components/SignupForm'
+import {BottomTabs} from './bottomTab';
 import {Profile} from './login/components/profile';
+import {connect} from 'react-redux';
 
+const AuthStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerContent() {
@@ -14,20 +19,38 @@ function DrawerContent() {
   );
 }
 
-function HomeScreen() {
+function LoadingScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+      <Text>Loading ...</Text>
     </View>
   );
 }
 
-const Main = () => {
+const Main = ({loading, user}) => {
+//  const {loading, user} = props.auth;
+
+  console.log("main screen auth:" , user);
+
+  if(loading){
+    return <LoadingScreen />
+  }
   return (
-    <Drawer.Navigator drawerContent={() => <Profile />}>
-      <Drawer.Screen name="Home" component={StackNavigator} />
-    </Drawer.Navigator>
+    user ? (
+      <Drawer.Navigator drawerContent={() => <Profile />}>
+        <Drawer.Screen name="Home" component={BottomTabs} />
+      </Drawer.Navigator>
+    ): (
+      <AuthStack.Navigator>
+        <AuthStack.Screen name="SignIn" component={LoginForm} 
+        options={{title: 'Sign In'}}/>
+        <AuthStack.Screen name="SignUp" component={SignupForm} 
+        options={{title: 'Sign Up'}}/>
+      </AuthStack.Navigator>
+
+    )
   );
 };
 
-export default Main;
+
+export default connect(state => ({ loading: state.auth.loading, user: state.auth.user }))(Main);

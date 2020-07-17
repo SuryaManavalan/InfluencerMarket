@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import CampaignCreate from './campaignMgmt/components/campaignCreate';
 import CampaignList from './campaignMgmt/components/campaignList';
 import CampaignSearch from './campaignMgmt/components/campaignSearch';
+import {StackNavigator} from './stackNav';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -56,7 +57,7 @@ export const BottomTabs = props => {
       >
         <Tab.Screen
           name="CampaignList"
-          component={CampaignList}
+          component={StackNavigator}
           options={{
             tabBarIcon: 'home-account',
             tabBarColor,

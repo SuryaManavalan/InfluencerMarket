@@ -6,7 +6,6 @@ import {  Appbar, Avatar, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 import CampaignEdit from './campaignMgmt/components/campaignEdit';
 import CampaignList from './campaignMgmt/components/campaignList';
-import {BottomTabs} from './bottomTab';
 
 //import { StackNavigatorParamlist } from './types';
 
@@ -28,10 +27,10 @@ const Header = ({ scene, previous, navigation }) => {
       {previous ? (
         <Appbar.BackAction
           onPress={()=>{
-            navigation.navigate('Home', {
-              screen: 'CampaignList'})}
-            }
-              //navigation.pop}
+            // navigation.navigate('Home', {
+            //   screen: 'CampaignList'})}
+            // }
+              navigation.pop(1) }}
             color={theme.colors.primary}
         />
       ) : (
@@ -72,7 +71,7 @@ export const StackNavigator = () => {
     >
       <Stack.Screen
         name="CampaignList"
-        component={BottomTabs}
+        component={CampaignList}
         options={{ headerTitle: 'Campaign List' }}
       />
       <Stack.Screen

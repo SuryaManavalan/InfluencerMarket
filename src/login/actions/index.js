@@ -22,13 +22,13 @@ export const passwordChanged = (text) => {
     };
 };
 
-export const loginUser = ({ email, password }) => {
+export const loginUser = ({ email, password, navigation }) => {
     //console.log("index login:", email);
     return (dispatch) => {
         dispatch({ type: LOGIN_USER_LOAD });
         auth().signInWithEmailAndPassword(email, password)
             .then(user => {
-                loginUserSuccess(dispatch, user)
+                loginUserSuccess(dispatch, user, navigation)
             })
             .catch((error) => {
                 console.log("login error", error)
@@ -87,12 +87,13 @@ const loginUserFail = (dispatch) => {
     });
 }
 
-const loginUserSuccess = (dispatch, user) => {
+const loginUserSuccess = (dispatch, user, navigation) => {
     console.log("login success");
     dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: user
     });
 
-    Actions.campaign();
+    //navigation.jumpTo('Home', {Screen: 'CampaignList'});
+    //navigation.navigate('CampaignList');
 }
