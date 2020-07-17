@@ -2,6 +2,7 @@ import React, { Component } from   'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import ResultsDetail from './resultsDetail';
 import {Actions } from 'react-native-router-flux';
+import * as RootNavigation from '../../../src/RootNavigation.js';
 //import { withNavigation } from 'react-navigation';
 
 class ResultsList extends Component  {
@@ -14,7 +15,7 @@ class ResultsList extends Component  {
         //    this.props.navigation.navigate('Home', {
         //     screen: 'CampaignEdit',
         //     params: { selectedCampaign: selectedCampaign}});
-        this.props.navigation.push('CampaignEdit', { selectedCampaign: selectedCampaign});
+        RootNavigation.navigate('CampaignEdit', { selectedCampaign: selectedCampaign});
         }
         
     render() {

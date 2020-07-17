@@ -6,10 +6,14 @@ import {  Appbar, Avatar, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 import CampaignEdit from './campaignMgmt/components/campaignEdit';
 import CampaignList from './campaignMgmt/components/campaignList';
+import LoginForm from './login/components/LoginForm'
+import SignupForm from './login/components/SignupForm'
+import {BottomTabs} from './bottomTab';
 
 //import { StackNavigatorParamlist } from './types';
 
 const Stack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
 const Header = ({ scene, previous, navigation }) => {
   const { options } = scene.descriptor;
@@ -60,7 +64,7 @@ const Header = ({ scene, previous, navigation }) => {
 
 export const StackNavigator = () => {
   return (
-    <Stack.Navigator
+   <Stack.Navigator
       initialRouteName="CampaignList"
       headerMode="screen"
       screenOptions={{

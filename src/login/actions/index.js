@@ -94,6 +94,4 @@ const loginUserSuccess = (dispatch, user, navigation) => {
         payload: user
     });
 
-    //navigation.jumpTo('Home', {Screen: 'CampaignList'});
-    //navigation.navigate('CampaignList');
 }

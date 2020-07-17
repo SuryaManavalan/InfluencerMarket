@@ -33,7 +33,7 @@ class CampaignEdit extends Component {
             // campaignDiscount,
             campaignCategory, campaignKey} = this.props;
         
-        console.log("button press :", campaignKey);
+        console.log("button press :");
 
         this.props.campaignEdit({campaignKey, campaignName,
             campaignDesc,
@@ -57,7 +57,7 @@ class CampaignEdit extends Component {
     onAccept(){
         console.log("in onAccept", this.props.campaignKey);
         this.setModalVisible(false);
-        this.props.campaignDelete(this.props.campaignKey);
+        this.props.campaignDelete(this.props.campaignKey, this.props.navigation);
     }
 
     onDecline() {

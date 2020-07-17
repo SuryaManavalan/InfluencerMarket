@@ -21,7 +21,7 @@ class SignupForm extends Component {
     }
 
     toSignin() {
-        Actions.login();
+        this.props.navigation.navigate('SignIn');
     }
 
     setToggleCheckBox(value){

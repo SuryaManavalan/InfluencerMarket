@@ -36,7 +36,7 @@ class LoginForm extends Component {
     }
 
     toSignup(){
-        Actions.signup();
+        this.props.navigation.push('SignUp');
     }
 
     renderError(){

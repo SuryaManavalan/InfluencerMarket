@@ -1,5 +1,6 @@
 
 import firestore, { firebase } from '@react-native-firebase/firestore';
+import * as RootNavigation from '../../../src/RootNavigation.js';
 import {Actions } from 'react-native-router-flux'
 import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE, CAMPAIGN_CREATE_SUCCESS,
      CAMPAIGN_CREATE_FAIL, CAMPAIGN_CAT_LIST, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
@@ -113,14 +114,13 @@ export const campaignCreateSuccess= (dispatch, data) => {
     dispatch({type: CAMPAIGN_CREATE_SUCCESS,
         payload: data});
     
-    Actions.campaignList();
+        RootNavigation.navigate('CampaignList');
 
 }
 
 export const campaignEdit= ( {campaignKey, campaignName, campaignDesc, campaignMobile,
     campaignDiscount,  campaignCategory} )  => {
 
-//        console.log("***camp edit :", campaignKey);
 //       console.log("***camp edit2 :", campaignDesc)
         return (dispatch) => {
             dispatch({type: CAMPAIGN_EDIT});
@@ -134,8 +134,7 @@ export const campaignEdit= ( {campaignKey, campaignName, campaignDesc, campaignM
                 .then(data => {
                     dispatch({type: CAMPAIGN_EDIT_SUCCESS,
                         payload: data});
-                    
-                    Actions.campaignList();
+                        RootNavigation.navigate('CampaignList');
                     console.log("campaign Edit Success ");  
                 })
                 
@@ -153,7 +152,7 @@ export const campaignDelete= ( campaignKey)  => {
                 .delete()
                 .then(() => {
                     console.log("campaign del Success ");  
-                    Actions.campaignList();
+                    RootNavigation.navigate('CampaignList');
                 })
                 
                 .catch((error) =>{ 
