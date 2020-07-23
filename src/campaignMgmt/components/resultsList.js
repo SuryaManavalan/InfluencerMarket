@@ -10,12 +10,12 @@ class ResultsList extends Component  {
    // navigation = useNavigation();
 
          onCampaignPress =(selectedCampaign) => {
-           // Actions.campaignEdit({selectedCampaign: selectedCampaign});
-        //   console.log("before navigate", selectedCampaign);
-        //    this.props.navigation.navigate('Home', {
-        //     screen: 'CampaignEdit',
-        //     params: { selectedCampaign: selectedCampaign}});
-        RootNavigation.navigate('CampaignEdit', { selectedCampaign: selectedCampaign});
+            // Actions.campaignEdit({selectedCampaign: selectedCampaign});
+            //   console.log("before navigate", selectedCampaign);
+            //    this.props.navigation.navigate('Home', {
+            //     screen: 'CampaignEdit',
+            //     params: { selectedCampaign: selectedCampaign}});
+            RootNavigation.navigate('CampaignEdit', { selectedCampaign: selectedCampaign});
         }
         
     render() {

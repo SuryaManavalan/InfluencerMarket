@@ -7,6 +7,7 @@ import SignupForm from './login/components/SignupForm'
 import {BottomTabs} from './bottomTab';
 import {Profile} from './login/components/profile';
 import {connect} from 'react-redux';
+import  Influencer  from './login/components/influencer';
 
 const AuthStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -37,7 +38,8 @@ const Main = ({loading, user}) => {
   }
   return (
     user ? (
-      <Drawer.Navigator drawerContent={() => <Profile />}>
+      // <Drawer.Navigator drawerContent={() => <Profile />}>
+      <Drawer.Navigator drawerContent={() => <Influencer  />}>
         <Drawer.Screen name="Home" component={BottomTabs} />
       </Drawer.Navigator>
     ): (
