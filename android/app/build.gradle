@@ -202,7 +202,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:2.0.1'
     // Add the Firebase SDK for Google Analytics
     //implementation 'com.google.firebase:firebase-analytics:17.4.2'
     //implementation 'com.google.firebase:firebase-firestore:21.4.3'

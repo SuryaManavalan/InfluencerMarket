@@ -23,7 +23,7 @@ class SignupForm extends Component {
 
     toSignin() {
         this.props.resetError();
-        Actions.login();
+        this.props.navigation.navigate('SignIn');
     }
 
     renderError() {

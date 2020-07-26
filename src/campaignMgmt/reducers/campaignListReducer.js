@@ -9,7 +9,7 @@ export default (state = INITIAL_STATE, action) => {
     
     switch (action.type) {
         case CAMPAIGN_SEARCH_INIT:
-            console.log("in CAMPAIGN_SEARCH_INIT:", action.payload)
+//            console.log("in CAMPAIGN_SEARCH_INIT:", action.payload)
             return {...state, ...SEARCH_INITIAL_STATE   };
         case CAMPAIGN_SEARCH_SUCCESS:
 //            console.log("in CAMPAIGN_SEARCH_SUCCESS:", action.payload)

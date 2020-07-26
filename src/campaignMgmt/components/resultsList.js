@@ -2,12 +2,20 @@ import React, { Component } from   'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import ResultsDetail from './resultsDetail';
 import {Actions } from 'react-native-router-flux';
-
+import * as RootNavigation from '../../../src/RootNavigation.js';
+//import { withNavigation } from 'react-navigation';
 
 class ResultsList extends Component  {
 
+   // navigation = useNavigation();
+
          onCampaignPress =(selectedCampaign) => {
-            Actions.campaignEdit({selectedCampaign: selectedCampaign});
+            // Actions.campaignEdit({selectedCampaign: selectedCampaign});
+            //   console.log("before navigate", selectedCampaign);
+            //    this.props.navigation.navigate('Home', {
+            //     screen: 'CampaignEdit',
+            //     params: { selectedCampaign: selectedCampaign}});
+            RootNavigation.navigate('CampaignEdit', { selectedCampaign: selectedCampaign});
         }
         
     render() {

@@ -20,9 +20,9 @@ class LoginForm extends Component {
 
     onButtonPress(){
         if (this.props.email != '' && this.props.password != ''){
-            const {email, password} = this.props;
-            console.log("button press:", email);
-            this.props.loginUser({email, password});
+          const {email, password, navigation} = this.props;
+          console.log("button press:", email);
+          this.props.loginUser({email, password, navigation});
         }
     }
 
@@ -39,7 +39,7 @@ class LoginForm extends Component {
 
     toSignup(){
         this.props.resetError();
-        Actions.signup();
+        this.props.navigation.push('SignUp');
     }
 
     renderError(){

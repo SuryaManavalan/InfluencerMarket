@@ -15,8 +15,9 @@ class CampaignEdit extends Component {
       }
 
     componentDidMount() {
-        console.log("willmount:", this.props.selectedCampaign);
-        _.each(this.props.selectedCampaign, (value, prop) => {
+        const { navigation, route } = this.props;
+    //    console.log("Edit willmount:", route.params.selectedCampaign);
+        _.each(route.params.selectedCampaign, (value, prop) => {
             if(prop === "name") prop = "campaignName";
             if(prop === "description") prop = "campaignDesc";
             if(prop === "name") prop = "categoryName";
@@ -32,7 +33,7 @@ class CampaignEdit extends Component {
             // campaignDiscount,
             campaignCategory, campaignKey} = this.props;
         
-        console.log("button press :", campaignKey);
+        console.log("button press :");
 
         this.props.campaignEdit({campaignKey, campaignName,
             campaignDesc,
@@ -56,7 +57,7 @@ class CampaignEdit extends Component {
     onAccept(){
         console.log("in onAccept", this.props.campaignKey);
         this.setModalVisible(false);
-        this.props.campaignDelete(this.props.campaignKey);
+        this.props.campaignDelete(this.props.campaignKey, this.props.navigation);
     }
 
     onDecline() {
