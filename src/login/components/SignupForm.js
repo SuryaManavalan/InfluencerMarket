@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
-import { Card, CardSection, Input, Spinner, Button } from '../../components/common';
-import { emailChanged, passwordChanged, signupUser } from '../actions';
-import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, TextInput, CheckBox } from 'react-native';
-
+import { emailChanged, passwordChanged, signupUser, typeUpdate, resetError} from '../actions';
+import { Picker } from '@react-native-community/picker';
+import { View, Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Image, TextInput} from 'react-native';
 class SignupForm extends Component {
 
     onEmailChange(text) {
@@ -16,32 +15,28 @@ class SignupForm extends Component {
     }
 
     onButtonPress() {
-        const { email, password, usertype } = this.props;
-        this.props.signupUser({ email, password, usertype});
+        if (this.props.email != '' && this.props.password != '') {
+            const { email, password, usertype } = this.props;
+            this.props.signupUser({ email, password, usertype });
+        }
     }
 
     toSignin() {
+        this.props.resetError();
         this.props.navigation.navigate('SignIn');
-    }
-
-    setToggleCheckBox(value){
-        this.props.usertype = value
     }
 
     renderError() {
         if (this.props.error) {
             return (
-                <View style={{ backgroundColor: 'white' }}>
-                    <Text style={{ color: 'red' }}>
-                        {this.props.error}
-                    </Text>
-                </View>
+                <Text style={{ color: 'white', fontWeight: 'bold'}}>
+                    {this.props.error}
+                </Text>
             )
         }
     }
 
     render() {
-        const toggleCheckBox = false
         return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
                 <View style={styles.logoContainer}>
@@ -62,7 +57,7 @@ class SignupForm extends Component {
                         onChangeText={this.onEmailChange.bind(this)}
                         value={this.props.email}
                     />
-                    <TextInput style={styles.input}
+                    <TextInput style={styles.inputPassword}
                         placeholder="Password"
                         placeholderTextColor='rgba(225,225,225,0.8)'
                         autoCorrect={false}
@@ -73,12 +68,14 @@ class SignupForm extends Component {
                         value={this.props.password}
                     />
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <CheckBox
-                            center
-                            value={toggleCheckBox}
-                            onValueChange={() => this.setToggleCheckBox.bind(toggleCheckBox)}
-                        />
-                        <Text style={{ color: 'white',fontSize: 17, marginBottom: 15 }}>Influencer</Text>
+                        <Picker
+                            style={{ flex: 1, color: 'white' }}
+                            selectedValue={this.props.usertype}
+                            onValueChange={value => this.props.typeUpdate(value)}>
+                            <Picker.Item label="Influencer" value="influencer" />
+                            <Picker.Item label="Company" value="company" />
+                        </Picker>
+                        {this.renderError()}
                     </View>
                     <TouchableOpacity onPress={this.onButtonPress.bind(this)} style={styles.buttonContainer}>
                         <Text style={styles.buttonText}>Sign Up</Text>
@@ -132,6 +129,14 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius: 25
     },
+    inputPassword: {
+        color: 'white',
+        height: 60,
+        backgroundColor: 'rgb(193, 119, 103)',
+        paddingHorizontal: 10,
+        marginBottom: 2,
+        borderRadius: 25
+    },
     buttonContainer: {
         backgroundColor: 'white',
         paddingVertical: 20,
@@ -168,4 +173,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, signupUser })(SignupForm);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, signupUser, typeUpdate, resetError})(SignupForm);

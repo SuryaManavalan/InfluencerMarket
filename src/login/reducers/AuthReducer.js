@@ -2,12 +2,12 @@ import { act } from "react-test-renderer";
 import {
     EMAIL_CHANGED, PASSWORD_CHANGED,
     LOGIN_USER_SUCCESS, LOGIN_USER_FAIL,
-    LOGIN_USER_LOAD, TYPE_ADD_FAIL, TYPE_ADD_SUCCESS
+    LOGIN_USER_LOAD, SIGNUP_USER_FAIL, TYPE_ADD_FAIL, TYPE_ADD_SUCCESS, TYPE_UPDATE, RESET_ERROR
 } from '../types';
 
 const INITIAL_STATE = {
     email: '', password: '',
-    user: null, usertype: false, error: '', loading: false
+    user: null, usertype: "influencer", error: '', loading: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -27,12 +27,19 @@ export default (state = INITIAL_STATE, action) => {
         case TYPE_ADD_SUCCESS:
             //console.log("in login reducer:", action.payload)
             return { ...state, ...INITIAL_STATE, usertype: action.payload };
+        case SIGNUP_USER_FAIL:
+            //console.log("in login reducer:", action.payload)
+            return { ...state, error: 'Invalid Email or Password', loading: false };
         case TYPE_ADD_FAIL:
             //console.log("in login reducer:", action.payload)
-            return { ...state, error: 'Type Adding Failed'};
+            return { ...state, error: 'Type Adding Failed' };
+        case TYPE_UPDATE:
+            return { ...state, usertype: action.payload };
         case LOGIN_USER_LOAD:
             //console.log("in login reducer:", action.payload)
             return { ...state, loading: true, error: '' };
+        case RESET_ERROR:
+            return { ...state, error: '' };
         default:
             return state;
     }
