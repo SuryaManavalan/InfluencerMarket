@@ -10,6 +10,11 @@ const INITIAL_STATE = {
     user: null, usertype: "influencer", error: '', loading: false
 };
 
+const SIGNUP_INITIAL_STATE = {
+    email: '', password: '',
+    usertype: "influencer", error: '', loading: false
+};
+
 export default (state = INITIAL_STATE, action) => {
     //    console.log("reducer:", action.payload);
 
@@ -26,7 +31,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, error: 'Authentication Failed', loading: false };
         case TYPE_ADD_SUCCESS:
             //console.log("in login reducer:", action.payload)
-            return { ...state, ...INITIAL_STATE, usertype: action.payload };
+            return { ...state, ...SIGNUP_INITIAL_STATE, usertype: action.payload };
         case SIGNUP_USER_FAIL:
             //console.log("in login reducer:", action.payload)
             return { ...state, error: 'Invalid Email or Password', loading: false };
