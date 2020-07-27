@@ -44,9 +44,9 @@ const Main = ({loading, user}) => {
       </Drawer.Navigator>
     ): (
       <AuthStack.Navigator>
-        <AuthStack.Screen name="SignIn" component={LoginForm} 
+        <AuthStack.Screen name="SignIn" component={LoginForm} hideNavBar
         options={{title: 'Sign In'}}/>
-        <AuthStack.Screen name="SignUp" component={SignupForm} 
+        <AuthStack.Screen name="SignUp" component={SignupForm} hideNavBar
         options={{title: 'Sign Up'}}/>
       </AuthStack.Navigator>
 
