@@ -20,21 +20,22 @@ import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE, C
         //const {currentUser} = firebase.auth();
 
         return (dispatch) => {
-            dispatch({type: CAMPAIGN_CAT_LIST});
+//            dispatch({type: CAMPAIGN_CAT_LIST});
             firestore().collection('campaigns')
                 .onSnapshot(querySnapshot => {
-                    const campaignList = [];
-//                    console.log("Campaign Cat List2", campaignList);
+                    const campList = [];
+//                    console.log("Campaign Cat List2", querySnapshot);
 
                     querySnapshot.forEach(documentSnapshot => {
-                        campaignList.push({
+                        campList.push({
                         ...documentSnapshot.data(),
                         key: documentSnapshot.id,
                       });
-//                      console.log("Campaign Cat List3*******", campaignList);
-                      dispatch({type: CAMPAIGN_LIST_SUCCESS,
-                        payload: campaignList});
                     })
+                    console.log("Campaign Cat List3*******", campList);
+                    dispatch({type: CAMPAIGN_LIST_SUCCESS,
+                      payload: campList});
+
                 });
         };
     }
@@ -55,12 +56,15 @@ export const campaignCreate= ( {campaignName, campaignDesc, campaignMobile,
 
         return (dispatch) => {
             dispatch({type: CAMPAIGN_CREATE});
+//            const uid = firebase.auth.id;
             firestore().collection('campaigns')
                 .add({
                     name: campaignName,
                     description: campaignDesc,
                     categoryName: campaignCategory,
-                    nameKeywords: nameKeywords
+                    nameKeywords: nameKeywords,
+                    author: firebase.auth().currentUser.displayName, 
+                    author_id: firebase.auth().currentUser.uid                 
                 })
                 .then(data => {
                     campaignCreateSuccess(dispatch,data)  })

@@ -15,8 +15,8 @@ export default (state = INITIAL_STATE, action) => {
 //            console.log("in CAMPAIGN_SEARCH_SUCCESS:", action.payload)
             return {...state, campaignSearchList:action.payload   };
         case CAMPAIGN_LIST_SUCCESS:
-//            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
-            return {...state, campaignList:action.payload   };
+            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
+            return {...state, campList:action.payload   };
         case CAMPAIGN_LIST_FAIL:
 //            console.log("in CAMPAIGN_LIST_FAIL:", action.payload)
             return {...state, error: 'Campaign list Failed'};

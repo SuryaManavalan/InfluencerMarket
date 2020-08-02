@@ -15,21 +15,38 @@ class CampaignList extends Component {
 
   }
        
-  filterResultsByCategory = (category)=> {
-    return searchResults.filter(filteredResult => {
-        return filteredResult.categoryName === category;
-    })
-
+  myCampaigns = (searchResults)=> {
+//    console.log("filt result : ", searchResults);
+    if(searchResults != undefined)
+    {
+      return searchResults.filter(filteredResult => {
+          console.log("my filt:", this.props.uid)
+          return filteredResult.author_id ==  this.props.uid;
+      })
+    }
   }
 
+  otherCampaigns = (searchResults)=> {
+    console.log("filt result2 : ", searchResults);
+    if(searchResults != undefined)
+    {
+      return searchResults.filter(filteredResult => {
+          return filteredResult.author_id !== this.props.uid;
+      })
+    }
+  }
 
       render(){
-        console.log("in list comp", this.props.campaignList);
+        console.log("in list comp$$$$$$", this.props.campList);
+
+        const myCampaignList = this.myCampaigns(this.props.campList);
+        const otherCampaignList = this.otherCampaigns(this.props.campList);
+        
         return (
           <SafeAreaView style={styles.container}>
-            <ResultsList filteredResults={this.props.campaignList} navigation={this.props.navigation} title="Category 1" />
-            <ResultsList filteredResults={this.props.campaignList}  navigation={this.props.navigation} title="Category 1" />
-            <ResultsList filteredResults={this.props.campaignList}  navigation={this.props.navigation} title="Category 1" />
+            <ResultsList filteredResults={myCampaignList} navigation={this.props.navigation} title="My Campaigns" />
+            <ResultsList filteredResults={otherCampaignList}  navigation={this.props.navigation} title="Other Campaigns" />
+            <ResultsList filteredResults={otherCampaignList}  navigation={this.props.navigation} title="Trending Campaigns" />
           </SafeAreaView>
 
         ); 
@@ -53,11 +70,13 @@ const styles = StyleSheet.create({
   });
 
 const mapStateToProps = (state) => {
-//    console.log("mapStateToProps camp list:", state);
-    const  {campaignList} = state.campaignListInfo;
-//    console.log("mapStateToProps camp list2:", campaignList);
+//    console.log("mapStateToProps camp list:", state.campaignListInfo);
+    const  {campList} = state.campaignListInfo;
+    const uid = state.auth.user.user.uid;
+    console.log("list uid :", uid);
+    console.log("mapStateToProps camp list2:", campList);
 
-     return{ campaignList  };
+     return{ campList, uid  };
 
 }
 
