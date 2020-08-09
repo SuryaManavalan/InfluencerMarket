@@ -35,6 +35,11 @@ class ResultsList extends Component  {
                         </TouchableOpacity>
                     )
                 }}
+                onEndReached={()=>this.props.moreListfunc(this.props.uid, this.props.type, 
+                    this.props.limit, this.props.lastVisible )}
+                // How Close To The End Of List Until Next Data Request Is Made
+                onEndReachedThreshold={0}
+      
             />
 
         </View>
