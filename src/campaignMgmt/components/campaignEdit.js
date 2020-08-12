@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Communications from 'react-native-communications';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { campaignUpdate, campaignEdit, campaignDelete } from '../actions';
+import { campaignUpdate, campaignEdit, campaignDelete, campaignRegister} from '../actions';
 import { Card, CardSection, ModalConfirm, Button } from '../../components/common';
 import CampaignForm from './campaignForm';
 import { View, Text} from 'react-native';
@@ -17,12 +17,14 @@ class CampaignEdit extends Component {
 
     componentDidMount() {
         const { navigation, route } = this.props;
-        //    console.log("Edit willmount:", route.params.selectedCampaign);
+        //console.log("Selected Campaign: ", route.params.selectedCampaign);
+        console.log("Selected Campaign: ", route.params.selectedCampaign.registeredUsers);
         _.each(route.params.selectedCampaign, (value, prop) => {
             if (prop === "name") prop = "campaignName";
             if (prop === "description") prop = "campaignDesc";
             if (prop === "name") prop = "categoryName";
             if (prop === "key") prop = "campaignKey";
+            if (prop === "registeredUsers") prop = "preRegUsers";
             this.props.campaignUpdate({ prop, value });
         });
     }
@@ -89,8 +91,8 @@ class CampaignEdit extends Component {
     }
 
     onRegister() {
-        console.log("Registered for Campaign");
-        
+        console.log("Registered for Campaign: ", this.props.campaignKey);
+        this.props.campaignRegister(this.props.user.user.uid, this.props.campaignKey, this.props.preRegUsers);
     }
 
     onTextPress() {
@@ -128,6 +130,7 @@ class CampaignEdit extends Component {
 const mapStateToProps = (state) => {
     //console.log("mapStateToProps:", state);
     const {
+        user,
         usertype,
         userData
     } = state.auth;
@@ -138,10 +141,12 @@ const mapStateToProps = (state) => {
         campaignMobile,
         // campaignDiscount,
         campaignCategory,
-        campaignKey
+        campaignKey,
+        preRegUsers
     } = state.campaignForm;
 
     return {
+        preRegUsers,
         campaignName,
         campaignDesc,
         campaignMobile,
@@ -149,11 +154,12 @@ const mapStateToProps = (state) => {
         campaignCategory,
         campaignKey,
         usertype,
-        userData
+        userData,
+        user
     };
 
 }
 
 
-export default connect(mapStateToProps, { campaignUpdate, campaignEdit, campaignDelete })
+export default connect(mapStateToProps, { campaignUpdate, campaignEdit, campaignDelete, campaignRegister})
     (CampaignEdit);
