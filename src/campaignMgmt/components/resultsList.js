@@ -25,7 +25,6 @@ class ResultsList extends Component  {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data = {this.props.filteredResults}
-                keyExtractor={(filteredResult) => filteredResult.key}
                 renderItem={({item}) => {
                     return (
                         <TouchableOpacity >
@@ -35,10 +34,11 @@ class ResultsList extends Component  {
                         </TouchableOpacity>
                     )
                 }}
-                onEndReached={()=>this.props.moreListfunc(this.props.uid, this.props.type, 
+                keyExtractor={(item, index) => String(index)}
+                onEndReached={()=> this.props.moreListfunc(this.props.uid, this.props.type, 
                     this.props.limit, this.props.lastVisible )}
                 // How Close To The End Of List Until Next Data Request Is Made
-                onEndReachedThreshold={0}
+                onEndReachedThreshold={0.5}
       
             />
 
