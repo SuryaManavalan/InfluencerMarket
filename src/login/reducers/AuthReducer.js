@@ -7,12 +7,12 @@ import {
 
 const INITIAL_STATE = {
     email: '', password: '',
-    user: null, usertype: "influencer", error: '', loading: false
+    user: null, userData: null, usertype: "influencer", error: '', loading: false
 };
 
 const SIGNUP_INITIAL_STATE = {
     email: '', password: '',
-    usertype: "influencer", error: '', loading: false
+    usertype: "influencer", userData: null, error: '', loading: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -25,13 +25,13 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, password: action.payload };
         case LOGIN_USER_SUCCESS:
             //console.log("in login reducer:", action.payload)
-            return { ...state, ...INITIAL_STATE, user: action.payload };
+            return { ...state, ...INITIAL_STATE, user: action.payload.user, userData: action.payload.userData, usertype: action.payload.usertype};
         case LOGIN_USER_FAIL:
             //console.log("in login reducer:", action.payload)
             return { ...state, error: 'Authentication Failed', loading: false };
         case TYPE_ADD_SUCCESS:
             //console.log("in login reducer:", action.payload)
-            return { ...state, ...SIGNUP_INITIAL_STATE, usertype: action.payload };
+            return { ...state, ...SIGNUP_INITIAL_STATE, usertype: action.payload.usertype, userData: action.payload.userData};
         case SIGNUP_USER_FAIL:
             //console.log("in login reducer:", action.payload)
             return { ...state, error: 'Invalid Email or Password', loading: false };

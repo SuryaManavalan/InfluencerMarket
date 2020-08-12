@@ -15,6 +15,7 @@ class ResultsList extends Component  {
             //    this.props.navigation.navigate('Home', {
             //     screen: 'CampaignEdit',
             //     params: { selectedCampaign: selectedCampaign}});
+            
             RootNavigation.navigate('CampaignEdit', { selectedCampaign: selectedCampaign});
         }
         

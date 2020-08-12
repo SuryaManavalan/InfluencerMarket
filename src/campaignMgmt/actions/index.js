@@ -51,7 +51,7 @@ import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE, C
 export const campaignCreate= ( {campaignName, campaignDesc, campaignMobile,
     campaignDiscount,  campaignCategory} )  => {
 
-       const  nameKeywords = generateKeywords(campaignName);
+       const nameKeywords = generateKeywords(campaignName);
 
         return (dispatch) => {
             dispatch({type: CAMPAIGN_CREATE});

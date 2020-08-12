@@ -22,7 +22,7 @@ class LoginForm extends Component {
         if (this.props.email != '' && this.props.password != ''){
           const {email, password, navigation} = this.props;
           console.log("button press:", email);
-          this.props.loginUser({email, password, navigation});
+          this.props.loginUser({email, password});
         }
     }
 
@@ -164,6 +164,7 @@ const mapStateToProps = state => {
         email: state.auth.email,
         password: state.auth.password,
         user: state.auth.user,
+        usertype:state.auth.usertype,
         error: state.auth.error,
         loading: state.auth.loading
     }
