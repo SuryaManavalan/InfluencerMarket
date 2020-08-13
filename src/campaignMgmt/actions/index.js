@@ -3,8 +3,8 @@ import firestore, { firebase } from '@react-native-firebase/firestore';
 import * as RootNavigation from '../../../src/RootNavigation.js';
 import {Actions } from 'react-native-router-flux'
 import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE,  CAMPAIGN_CREATE_SUCCESS,
-     CAMPAIGN_CREATE_FAIL, MORE_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
-     CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT} from '../types'
+     CAMPAIGN_CREATE_FAIL, MORE_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_SUCCESS, NEW_CAMPAIGN_LIST_SUCCESS,
+     CAMPAIGN_CREATE_INIT,CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT} from '../types'
 
     export const campaignUpdate = ({prop, value}) =>{
         console.log("action:************", prop)
@@ -14,32 +14,6 @@ import {CAMPAIGN_EDIT,CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE,  CAMPAIGN_CREATE_S
         };
     };
 
-//     export  const campaignCatList= ()=>{
-//         console.log("Campaign Cat List");
-
-//         //const {currentUser} = firebase.auth();
-
-//         return (dispatch) => {
-// //            dispatch({type: CAMPAIGN_CAT_LIST});
-//             firestore().collection('campaigns')
-//                 .onSnapshot(querySnapshot => {
-//                     const campList = [];
-// //                    console.log("Campaign Cat List2", querySnapshot);
-
-//                     querySnapshot.forEach(documentSnapshot => {
-//                         campList.push({
-//                         ...documentSnapshot.data(),
-//                         key: documentSnapshot.id,
-//                       });
-//                     })
-//                     console.log("Campaign Cat List3*******", campList);
-//                     dispatch({type: CAMPAIGN_LIST_SUCCESS,
-//                       payload: campList});
-
-//                 });
-//         };
-//     }
-        
 export  const campaignCatList= (uid, type, limit)=>{
     console.log("Campaign Cat List");
     
@@ -113,7 +87,7 @@ export  const moreCampaignCatList= (uid, type, limit, lastVisible)=>{
                               });
                             })
                             
-                            var lastVisibleNow = querySnapshot.docs[querySnapshot.docs.length-1];                            lastVisibleNow = campList[campList.length - 1].key;
+                            var lastVisibleNow = querySnapshot.docs[querySnapshot.docs.length-1];               
                             console.log("lastVisNow:", lastVisibleNow)
                             const myCampaigns = {
                                 documentData: campList,
@@ -134,6 +108,31 @@ export  const moreCampaignCatList= (uid, type, limit, lastVisible)=>{
     };
 }
 
+export  const newCampaignList= (uid)=>{
+    console.log("newCampaignList");
+    const date1 = new Date().setHours(0, 0, 0, 0);
+
+     return (dispatch) => {
+        firestore().collection('campaigns').where('created_date', '>=', date1)
+         .where('author_id', '==', uid).orderBy('created_date')
+            .onSnapshot(querySnapshot => {
+                const newCampaignList = [];
+                if(querySnapshot){
+                    querySnapshot.forEach(documentSnapshot => {
+                        console.log("new camp - foreach:", documentSnapshot.data());
+                        newCampaignList.push({
+                            ...documentSnapshot.data(),
+                            key: documentSnapshot.id,
+                        });
+                    })
+                }
+                    console.log("newCampaignList*******", newCampaignList);
+                dispatch({type: NEW_CAMPAIGN_LIST_SUCCESS,
+                    payload: newCampaignList});
+                })
+            };
+    };
+  
 
     export const campaignCreateInit = () =>{
         console.log("campaignCreateInit:************")
@@ -158,7 +157,8 @@ export const campaignCreate= ( {campaignName, campaignDesc, campaignMobile,
                     categoryName: campaignCategory,
                     nameKeywords: nameKeywords,
                     author: firebase.auth().currentUser.displayName, 
-                    author_id: firebase.auth().currentUser.uid                 
+                    author_id: firebase.auth().currentUser.uid,
+                    created_date: firebase.firestore.FieldValue.serverTimestamp()                 
                 })
                 .then(data => {
                     campaignCreateSuccess(dispatch,data)  })

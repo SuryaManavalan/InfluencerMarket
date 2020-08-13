@@ -1,5 +1,5 @@
 import {CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_FAIL, CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT,
-    MORE_CAMPAIGN_LIST_SUCCESS} from '../types';
+    MORE_CAMPAIGN_LIST_SUCCESS, NEW_CAMPAIGN_LIST_SUCCESS} from '../types';
 import { act } from 'react-test-renderer';
 
 const INITIAL_STATE= { campaignListInfo: [] };
@@ -15,9 +15,13 @@ export default (state = INITIAL_STATE, action) => {
         case CAMPAIGN_SEARCH_SUCCESS:
 //            console.log("in CAMPAIGN_SEARCH_SUCCESS:", action.payload)
             return {...state, campaignSearchList:action.payload   };
-            case CAMPAIGN_LIST_SUCCESS:
-                console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
-                return {...state, myCampList:action.payload   };
+        case NEW_CAMPAIGN_LIST_SUCCESS:
+            console.log("in NEW_CAMPAIGN_LIST_SUCCESS:", action.payload)
+            return {...state, newCampList:action.payload   };
+        case CAMPAIGN_LIST_SUCCESS:
+            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
+            return {...state, myCampList:action.payload   };
+
         case CAMPAIGN_LIST_SUCCESS:
             console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
             return {...state, myCampList:action.payload   };
@@ -29,7 +33,6 @@ export default (state = INITIAL_STATE, action) => {
                 lastVisible: action.payload.lastVisible,
                 loading: action.payload.loading,
             }  }; 
-//            return {...state, myCampList:action.payload   };
     
         case CAMPAIGN_LIST_FAIL:
 //            console.log("in CAMPAIGN_LIST_FAIL:", action.payload)

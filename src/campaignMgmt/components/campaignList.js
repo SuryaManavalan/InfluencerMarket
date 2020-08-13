@@ -2,40 +2,41 @@ import React, {useState, useEffect, Component} from 'react';
 import { ActivityIndicator, Text, View,  ScrollView } from 'react-native';
 import {connect} from 'react-redux';
 import {SafeAreaView, FlatList, StyleSheet } from 'react-native';
-import {campaignCatList, moreCampaignCatList} from '../actions';
+import {campaignCatList, newCampaignList, moreCampaignCatList} from '../actions';
 //import CampaignListIem from './campaignListItem';
 import ResultsList from './resultsList.js';
-import {MY_CAMPAIGNS, OTHER_CAMPAIGNS, TRENDING_CAMPAIGNS} from '../types'
+import {MY_CAMPAIGNS, NEW_CAMPAIGNS, OTHER_CAMPAIGNS, TRENDING_CAMPAIGNS} from '../types'
 
 
 
 class CampaignList extends Component {
   componentDidMount() {
-    console.log("comp WILLLLL MOUNT", this.props.navigation);
+    console.log("comp WILLLLL MOUNT", this.props.campaignCatList);
     this.props.campaignCatList(this.props.uid, MY_CAMPAIGNS, 4);
+//    this.props.newCampaignList(this.props.uid);
 
   }
        
-  myCampaigns = (searchResults)=> {
-//    console.log("filt result : ", searchResults);
-    if(searchResults != undefined)
-    {
-      return searchResults.filter(filteredResult => {
-          console.log("my filt:", this.props.uid)
-          return filteredResult.author_id ==  this.props.uid;
-      })
-    }
-  }
+//   myCampaigns = (searchResults)=> {
+// //    console.log("filt result : ", searchResults);
+//     if(searchResults != undefined)
+//     {
+//       return searchResults.filter(filteredResult => {
+//           console.log("my filt:", this.props.uid)
+//           return filteredResult.author_id ==  this.props.uid;
+//       })
+//     }
+//   }
 
-  otherCampaigns = (searchResults)=> {
-    console.log("filt result2 : ", searchResults);
-    if(searchResults != undefined)
-    {
-      return searchResults.filter(filteredResult => {
-          return filteredResult.author_id !== this.props.uid;
-      })
-    }
-  }
+//   otherCampaigns = (searchResults)=> {
+//     console.log("filt result2 : ", searchResults);
+//     if(searchResults != undefined)
+//     {
+//       return searchResults.filter(filteredResult => {
+//           return filteredResult.author_id !== this.props.uid;
+//       })
+//     }
+//   }
 
       render(){
         let docData = [];
@@ -45,22 +46,25 @@ class CampaignList extends Component {
         }
         console.log("in list comp$$$$$$", this.props.lastVisible);
 
-        //const myCampaignList = this.myCampaigns(this.props.campList.documentData);
-        //const otherCampaignList = this.otherCampaigns(this.props.campList.documentData);
-        
+        console.log('before sending func:', this.props.campaignCatList)
         return (
-          <SafeAreaView style={styles.container}>
+           <SafeAreaView style={styles.container}>
+          {/*    <ResultsList lastVisible={this.props.lastVisible} filteredResults={this.props.newCampList} 
+                 navigation={this.props.navigation} title="New Campaigns" 
+                 moreListfunc={this.props.moreCampaignCatList}
+                 uid={this.props.uid} type={NEW_CAMPAIGNS} limit={100}
+             /> */}
+            <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData}  
+              navigation={this.props.navigation} title="My Campaigns" 
+              moreListfunc={this.props.moreCampaignCatList}
+              uid={this.props.uid} type={MY_CAMPAIGNS} limit={4}
+            />
             <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData} 
-                navigation={this.props.navigation} title="My Campaigns" 
+                navigation={this.props.navigation} title="Other Campaigns" 
                 moreListfunc={this.props.moreCampaignCatList}
                 uid={this.props.uid} type={MY_CAMPAIGNS} limit={4}
             />
             <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData}  
-              navigation={this.props.navigation} title="Other Campaigns" 
-              moreListfunc={this.props.moreCampaignCatList}
-              uid={this.props.uid} type={MY_CAMPAIGNS} limit={4}
-            />
-              <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData}  
               navigation={this.props.navigation} title="Trending Campaigns" 
               moreListfunc={this.props.moreCampaignCatList}
               uid={this.props.uid} type={MY_CAMPAIGNS} limit={4}
@@ -90,16 +94,17 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
 //    console.log("mapStateToProps camp list:", state.campaignListInfo);
     const  {myCampList} = state.campaignListInfo;
+    const {newCampList} = state.campaignListInfo;
     var lastVisible = 0;
     if (myCampList)
       lastVisible = myCampList.lastVisible;
     const uid = state.auth.user.user.uid;
     console.log("list lastVisible :", lastVisible);
-    console.log("mapStateToProps camp list2:", myCampList);
+    console.log("mapStateToProps camp list2:", newCampList);
 
-     return{ myCampList, uid, lastVisible  };
+     return{ myCampList, newCampList, uid, lastVisible  };
 
 }
 
   // export default CampaignList;
-  export default connect(mapStateToProps, {campaignCatList, moreCampaignCatList}) (CampaignList);
+  export default connect(mapStateToProps, {campaignCatList,newCampaignList, moreCampaignCatList}) (CampaignList);
