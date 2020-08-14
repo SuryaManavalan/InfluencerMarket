@@ -48,7 +48,7 @@ export  const campaignCatList= (uid, type, limit)=>{
                                 lastVisible: lastVisible,
                                 loading: false,
                             }
-                            console.log("Campaign Cat List3*******", myCampaigns);
+//                            console.log("Campaign Cat List3*******", myCampaigns);
                             dispatch({type: CAMPAIGN_LIST_SUCCESS,
                                 payload:  myCampaigns
                             });
@@ -80,7 +80,7 @@ export  const moreCampaignCatList= (uid, type, limit, lastVisible)=>{
 
             docRef.get().then(querySnapshot => {
                             querySnapshot.forEach(documentSnapshot => {
-                                console.log("more each:", documentSnapshot.data())
+//                                console.log("more each:", documentSnapshot.data())
                                 campList.push({
                                 ...documentSnapshot.data(),
                                 key: documentSnapshot.id,
@@ -88,13 +88,13 @@ export  const moreCampaignCatList= (uid, type, limit, lastVisible)=>{
                             })
                             
                             var lastVisibleNow = querySnapshot.docs[querySnapshot.docs.length-1];               
-                            console.log("lastVisNow:", lastVisibleNow)
+//                            console.log("lastVisNow:", lastVisibleNow)
                             const myCampaigns = {
                                 documentData: campList,
                                 lastVisible: lastVisibleNow,
                                 loading: false,
                             }
-                            console.log("More ****Campaign Cat List3*******", myCampaigns);
+//                            console.log("More ****Campaign Cat List3*******", myCampaigns);
                             dispatch({type: MORE_CAMPAIGN_LIST_SUCCESS,
                                 payload:  myCampaigns
                             });
@@ -109,13 +109,17 @@ export  const moreCampaignCatList= (uid, type, limit, lastVisible)=>{
 }
 
 export  const newCampaignList= (uid)=>{
-    console.log("newCampaignList");
-    const date1 = new Date().setHours(0, 0, 0, 0);
+    var beginningDate = Date.now() - 604800000;
+    var beginningDateObject = new Date(beginningDate);
+
+    console.log("newCampaignList", beginningDateObject);
+    console.log("newCampaignList2",  uid);
 
      return (dispatch) => {
-        firestore().collection('campaigns').where('created_date', '>=', date1)
+        firestore().collection('campaigns').where('created_date', '>=', beginningDateObject)
          .where('author_id', '==', uid).orderBy('created_date')
             .onSnapshot(querySnapshot => {
+                console.log("query snap for new:", querySnapshot)
                 const newCampaignList = [];
                 if(querySnapshot){
                     querySnapshot.forEach(documentSnapshot => {

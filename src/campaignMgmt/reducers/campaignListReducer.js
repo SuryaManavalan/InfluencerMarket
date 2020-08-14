@@ -19,15 +19,11 @@ export default (state = INITIAL_STATE, action) => {
             console.log("in NEW_CAMPAIGN_LIST_SUCCESS:", action.payload)
             return {...state, newCampList:action.payload   };
         case CAMPAIGN_LIST_SUCCESS:
-            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
-            return {...state, myCampList:action.payload   };
-
-        case CAMPAIGN_LIST_SUCCESS:
-            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
+//            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
             return {...state, myCampList:action.payload   };
         case MORE_CAMPAIGN_LIST_SUCCESS:
-            console.log("in MORE_CAMPAIGN_LIST_SUCCESS1:", state.myCampList.documentData)
-            console.log("in MORE_CAMPAIGN_LIST_SUCCESS2:", action.payload.documentData)
+//            console.log("in MORE_CAMPAIGN_LIST_SUCCESS1:", state.myCampList.documentData)
+//            console.log("in MORE_CAMPAIGN_LIST_SUCCESS2:", action.payload.documentData)
             return {...state, myCampList:{
                 documentData:[...state.myCampList.documentData, ...action.payload.documentData],
                 lastVisible: action.payload.lastVisible,

@@ -11,9 +11,9 @@ import {MY_CAMPAIGNS, NEW_CAMPAIGNS, OTHER_CAMPAIGNS, TRENDING_CAMPAIGNS} from '
 
 class CampaignList extends Component {
   componentDidMount() {
-    console.log("comp WILLLLL MOUNT", this.props.campaignCatList);
+    console.log("comp WILLLLL MOUNT", this.props.uid);
     this.props.campaignCatList(this.props.uid, MY_CAMPAIGNS, 4);
-//    this.props.newCampaignList(this.props.uid);
+    this.props.newCampaignList(this.props.uid);
 
   }
        
@@ -44,16 +44,16 @@ class CampaignList extends Component {
           //console.log("check this####:",this.props.myCampList )
           docData = this.props.myCampList.documentData;
         }
-        console.log("in list comp$$$$$$", this.props.lastVisible);
+        console.log("in list new comp$$$$$$", this.props.newCampList);
 
-        console.log('before sending func:', this.props.campaignCatList)
+//        console.log('before sending func:', this.props.campaignCatList)
         return (
            <SafeAreaView style={styles.container}>
-          {/*    <ResultsList lastVisible={this.props.lastVisible} filteredResults={this.props.newCampList} 
+             <ResultsList lastVisible={this.props.lastVisible} filteredResults={this.props.newCampList} 
                  navigation={this.props.navigation} title="New Campaigns" 
                  moreListfunc={this.props.moreCampaignCatList}
                  uid={this.props.uid} type={NEW_CAMPAIGNS} limit={100}
-             /> */}
+             />
             <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData}  
               navigation={this.props.navigation} title="My Campaigns" 
               moreListfunc={this.props.moreCampaignCatList}
@@ -99,8 +99,8 @@ const mapStateToProps = (state) => {
     if (myCampList)
       lastVisible = myCampList.lastVisible;
     const uid = state.auth.user.user.uid;
-    console.log("list lastVisible :", lastVisible);
-    console.log("mapStateToProps camp list2:", newCampList);
+//    console.log("list lastVisible :", lastVisible);
+    console.log("mapStateToProps newcamp list 2:", newCampList);
 
      return{ myCampList, newCampList, uid, lastVisible  };
 
