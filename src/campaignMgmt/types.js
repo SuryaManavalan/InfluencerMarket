@@ -1,3 +1,4 @@
+export const CAMPAIGN_REGISTER = 'campaign_register';
 export const CAMPAIGN_UPDATE = 'campaign_update';
 export const CAMPAIGN_EDIT = 'campaign_edit';
 export const CAMPAIGN_EDIT_SUCCESS = 'campaign_edit_success';

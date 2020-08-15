@@ -1,5 +1,5 @@
 import {CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE,  CAMPAIGN_CREATE_SUCCESS,
-    CAMPAIGN_CREATE_FAIL, CAMPAIGN_CREATE_INIT} from '../types';
+    CAMPAIGN_CREATE_FAIL, CAMPAIGN_CREATE_INIT, CAMPAIGN_REGISTER} from '../types';
 import { act } from 'react-test-renderer';
 
 const INITIAL_STATE= {
@@ -17,6 +17,8 @@ export default (state = INITIAL_STATE, action) => {
 //    console.log("reducer:", action.payload);
     
     switch (action.type) {
+        case CAMPAIGN_REGISTER:
+            return {...state, ...INITIAL_STATE};
         case CAMPAIGN_UPDATE:
 //            console.log("in update");
             return {...state, [action.payload.prop]: action.payload.value};
