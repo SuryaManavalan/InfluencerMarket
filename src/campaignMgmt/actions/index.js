@@ -34,33 +34,7 @@ export const campaignUpdate = ({ prop, value }) => {
     };
 };
 
-//     export  const campaignCatList= ()=>{
-//         console.log("Campaign Cat List");
-
-//         //const {currentUser} = firebase.auth();
-
-//         return (dispatch) => {
-// //            dispatch({type: CAMPAIGN_CAT_LIST});
-//             firestore().collection('campaigns')
-//                 .onSnapshot(querySnapshot => {
-//                     const campList = [];
-// //                    console.log("Campaign Cat List2", querySnapshot);
-
-//                     querySnapshot.forEach(documentSnapshot => {
-//                         campList.push({
-//                         ...documentSnapshot.data(),
-//                         key: documentSnapshot.id,
-//                       });
-//                     })
-//                     console.log("Campaign Cat List3*******", campList);
-//                     dispatch({type: CAMPAIGN_LIST_SUCCESS,
-//                       payload: campList});
-
-//                 });
-//         };
-//     }
-
-export const campaignCatList = (uid, type, limit) => {
+export  const campaignCatList= (uid, type, limit)=>{
     console.log("Campaign Cat List");
 
     return (dispatch) => {
@@ -77,30 +51,29 @@ export const campaignCatList = (uid, type, limit) => {
         // console.log("query :", query);
 
         var docRef = firestore().collection('campaigns').where('author_id', '==', uid)
-            .orderBy('name').limit(limit)
+        .orderBy('name').limit(limit)
 
-        docRef.get().then(querySnapshot => {
-            const campList = [];
-            querySnapshot.forEach(documentSnapshot => {
-                campList.push({
-                    ...documentSnapshot.data(),
-                    key: documentSnapshot.id,
-                });
-            })
-            var lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+             docRef.get().then(querySnapshot => {
+                        const campList = [];
+                            querySnapshot.forEach(documentSnapshot => {
+                                campList.push({
+                                ...documentSnapshot.data(),
+                                key: documentSnapshot.id,
+                              });
+                            })
+                            var lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
+                            
+                            const myCampaigns = {
+                                documentData: campList,
+                                lastVisible: lastVisible,
+                                loading: false,
+                            }
+//                            console.log("Campaign Cat List3*******", myCampaigns);
+                            dispatch({type: CAMPAIGN_LIST_SUCCESS,
+                                payload:  myCampaigns
+                            });
 
-            const myCampaigns = {
-                documentData: campList,
-                lastVisible: lastVisible,
-                loading: false,
-            }
-            console.log("Campaign Cat List3*******", myCampaigns);
-            dispatch({
-                type: CAMPAIGN_LIST_SUCCESS,
-                payload: myCampaigns
-            });
-
-        })
+                        })
     };
 }
 
@@ -126,36 +99,61 @@ export const moreCampaignCatList = (uid, type, limit, lastVisible) => {
                 .orderBy('name').startAfter(lastVisible).limit(limit)
 
             docRef.get().then(querySnapshot => {
-                querySnapshot.forEach(documentSnapshot => {
-                    console.log("more each:", documentSnapshot.data())
-                    campList.push({
-                        ...documentSnapshot.data(),
-                        key: documentSnapshot.id,
-                    });
-                })
+                            querySnapshot.forEach(documentSnapshot => {
+//                                console.log("more each:", documentSnapshot.data())
+                                campList.push({
+                                ...documentSnapshot.data(),
+                                key: documentSnapshot.id,
+                              });
+                            })
+                            
+                            var lastVisibleNow = querySnapshot.docs[querySnapshot.docs.length-1];               
+//                            console.log("lastVisNow:", lastVisibleNow)
+                            const myCampaigns = {
+                                documentData: campList,
+                                lastVisible: lastVisibleNow,
+                                loading: false,
+                            }
+//                            console.log("More ****Campaign Cat List3*******", myCampaigns);
+                            dispatch({type: MORE_CAMPAIGN_LIST_SUCCESS,
+                                payload:  myCampaigns
+                            });
+                    
+                        })
 
-                var lastVisibleNow = querySnapshot.docs[querySnapshot.docs.length - 1]; lastVisibleNow = campList[campList.length - 1].key;
-                console.log("lastVisNow:", lastVisibleNow)
-                const myCampaigns = {
-                    documentData: campList,
-                    lastVisible: lastVisibleNow,
-                    loading: false,
-                }
-                console.log("More ****Campaign Cat List3*******", myCampaigns);
-                dispatch({
-                    type: MORE_CAMPAIGN_LIST_SUCCESS,
-                    payload: myCampaigns
-                });
-
-            })
-
-        } catch (exception) { console.log("retrieve more campaigns exception:", exception) }
-
-
-
+        } catch(exception){ console.log("retrieve more campaigns exception:", exception)}
     };
 }
 
+export  const newCampaignList= (uid)=>{
+    var beginningDate = Date.now() - 604800000;
+    var beginningDateObject = new Date(beginningDate);
+
+    console.log("newCampaignList", beginningDateObject);
+    console.log("newCampaignList2",  uid);
+
+     return (dispatch) => {
+        firestore().collection('campaigns').where('created_date', '>=', beginningDateObject)
+         .where('author_id', '==', uid).orderBy('created_date')
+            .onSnapshot(querySnapshot => {
+                console.log("query snap for new:", querySnapshot)
+                const newCampaignList = [];
+                if(querySnapshot){
+                    querySnapshot.forEach(documentSnapshot => {
+                        console.log("new camp - foreach:", documentSnapshot.data());
+                        newCampaignList.push({
+                            ...documentSnapshot.data(),
+                            key: documentSnapshot.id,
+                        });
+                    })
+                }
+                    console.log("newCampaignList*******", newCampaignList);
+                dispatch({type: NEW_CAMPAIGN_LIST_SUCCESS,
+                    payload: newCampaignList});
+                })
+            };
+    };
+  
 
 export const campaignCreateInit = () => {
     console.log("campaignCreateInit:************")
@@ -165,30 +163,30 @@ export const campaignCreateInit = () => {
     };
 };
 
-export const campaignCreate = ({ campaignName, campaignDesc, campaignMobile,
-    campaignDiscount, campaignCategory }) => {
+export const campaignCreate= ( {campaignName, campaignDesc, campaignMobile,
+    campaignDiscount,  campaignCategory} )  => {
 
-    const nameKeywords = generateKeywords(campaignName);
+       const  nameKeywords = generateKeywords(campaignName);
 
-    return (dispatch) => {
-        //            dispatch({type: CAMPAIGN_CREATE});
-        //            const uid = firebase.auth.id;
-        firestore().collection('campaigns')
-            .add({
-                name: campaignName,
-                description: campaignDesc,
-                categoryName: campaignCategory,
-                nameKeywords: nameKeywords,
-                author: firebase.auth().currentUser.displayName,
-                author_id: firebase.auth().currentUser.uid
-            })
-            .then(data => {
-                campaignCreateSuccess(dispatch, data)
-            })
-            .catch((error) => {
-                campaignCreateFail(dispatch, error);
-            });
-    }
+        return (dispatch) => {
+//            dispatch({type: CAMPAIGN_CREATE});
+//            const uid = firebase.auth.id;
+            firestore().collection('campaigns')
+                .add({
+                    name: campaignName,
+                    description: campaignDesc,
+                    categoryName: campaignCategory,
+                    nameKeywords: nameKeywords,
+                    author: firebase.auth().currentUser.displayName, 
+                    author_id: firebase.auth().currentUser.uid,
+                    created_date: firebase.firestore.FieldValue.serverTimestamp()                 
+                })
+                .then(data => {
+                    campaignCreateSuccess(dispatch,data)  })
+                .catch((error) =>{ 
+                    campaignCreateFail(dispatch, error);
+                });
+        }
 };
 
 const createKeywords = name => {

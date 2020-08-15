@@ -1,11 +1,11 @@
-import React, { Component } from   'react';
+import React, { PureComponent } from   'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import ResultsDetail from './resultsDetail';
 import {Actions } from 'react-native-router-flux';
 import * as RootNavigation from '../../../src/RootNavigation.js';
 //import { withNavigation } from 'react-navigation';
 
-class ResultsList extends Component  {
+class ResultsList extends PureComponent  {
 
    // navigation = useNavigation();
 
@@ -26,7 +26,6 @@ class ResultsList extends Component  {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data = {this.props.filteredResults}
-                keyExtractor={(filteredResult) => filteredResult.key}
                 renderItem={({item}) => {
                     return (
                         <TouchableOpacity >
@@ -36,11 +35,19 @@ class ResultsList extends Component  {
                         </TouchableOpacity>
                     )
                 }}
-                onEndReached={()=>this.props.moreListfunc(this.props.uid, this.props.type, 
-                    this.props.limit, this.props.lastVisible )}
+                onMomentumScrollBegin = {() => {this.onEndReachedCalledDuringMomentum = false;}}
+
+                keyExtractor={(item, index) => String(index)}
+                onEndReached={()=> {
+                    if (!this.onEndReachedCalledDuringMomentum) {
+                        this.props.moreListfunc(this.props.uid, this.props.type, 
+                        this.props.limit, this.props.lastVisible );
+                        this.onEndReachedCalledDuringMomentum = true;}
+                    }
+                }
                 // How Close To The End Of List Until Next Data Request Is Made
-                onEndReachedThreshold={0}
-      
+                onEndReachedThreshold={0.1}
+
             />
 
         </View>
