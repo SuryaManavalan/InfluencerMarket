@@ -168,6 +168,7 @@ const mapStateToProps = state => {
         password: state.auth.password,
         user: state.auth.user,
         usertype: state.auth.usertype,
+        userData:state.auth.userData,
         error: state.auth.error,
         loading: state.auth.loading
     }

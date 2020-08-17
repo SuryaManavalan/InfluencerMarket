@@ -22,20 +22,45 @@ export const passwordChanged = (text) => {
     };
 };
 
-export const typeUpdate = (text) =>{
+export const typeUpdate = (text) => {
     return {
         type: TYPE_UPDATE,
         payload: text
     };
 };
 
-export const loginUser = ({ email, password, navigation }) => {
+export const loginUser = ({ email, password}) => {
     //console.log("index login:", email);
     return (dispatch) => {
-        dispatch({ type: LOGIN_USER_LOAD });
         auth().signInWithEmailAndPassword(email, password)
             .then(user => {
-                loginUserSuccess(dispatch, user, navigation)
+                const influencersRef = firestore().collection('influencers').where('UID', '==', user.user.uid).get()
+                    .then(documentSnapshot => {
+                        var userData = null;
+                        var usertype = null;
+                        if (!documentSnapshot.empty) {
+                            documentSnapshot.docs.forEach(doc => {
+                                userData = doc.data();
+                                usertype = "influencer";
+                                console.log("---------------MARKER1--------------- : ", doc.data());
+                            })
+                        } else {
+                            const companiesRef = firestore().collection('companies').where('UID', '==', user.user.uid).get()
+                                .then(documentSnapshot => {
+                                    if (!documentSnapshot.empty) {
+                                        documentSnapshot.docs.forEach(doc => {
+                                            userData = doc.data();
+                                            usertype = "company";
+                                            console.log("---------------MARKER2---------------", doc.data());
+                                        })
+                                    } else {
+                                        console.log("CANT FIND USER IN INFLUENCERS OR COMPANIES")
+                                    }
+                                    loginUserSuccess(dispatch, user, userData, usertype)
+                                });
+                        }
+                        loginUserSuccess(dispatch, user, userData, usertype)
+                    });
             })
             .catch((error) => {
                 console.log("login error", error)
@@ -56,7 +81,7 @@ export const signupUser = ({ email, password, usertype }) => {
                             UID: auth().currentUser.uid,
                             email: email,
                         }).then(data => {
-                            typeAddSuccess(dispatch, data)
+                            typeAddSuccess(dispatch, 'influencer', data)
                         })
                         .catch((error) => {
                             typeAddFail(dispatch);
@@ -67,7 +92,7 @@ export const signupUser = ({ email, password, usertype }) => {
                             UID: auth().currentUser.uid,
                             email: email,
                         }).then(data => {
-                            typeAddSuccess(dispatch, data)
+                            typeAddSuccess(dispatch, 'company', data)
                         })
                         .catch((error) => {
                             typeAddFail(dispatch);
@@ -81,7 +106,7 @@ export const signupUser = ({ email, password, usertype }) => {
 };
 
 export const resetError = () => {
-    return{
+    return {
         type: RESET_ERROR
     };
 }
@@ -92,10 +117,10 @@ export const typeAddFail = (dispatch) => {
     });
 }
 
-export const typeAddSuccess = (dispatch, data) => {
+export const typeAddSuccess = (dispatch, usertype, userData) => {
     dispatch({
         type: TYPE_ADD_SUCCESS,
-        payload: data
+        payload: { usertype, userData }
     });
 }
 
@@ -111,10 +136,10 @@ const signupUserFail = (dispatch) => {
     });
 }
 
-const loginUserSuccess = (dispatch, user, navigation) => {
-    console.log("login success");
+const loginUserSuccess = (dispatch, user, userData, usertype) => {
+    console.log("login success: ", usertype);
     dispatch({
         type: LOGIN_USER_SUCCESS,
-        payload: user
+        payload: {user, userData, usertype}
     });
 }
