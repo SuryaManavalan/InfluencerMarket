@@ -8,7 +8,8 @@ const INITIAL_STATE= {
     capaignMobile: '',
     categoryName:'',
     campaignDiscount: '',
-    campaignKey: ''
+    campaignKey: '',
+    createdCamp:{}
 
 };
 
@@ -24,8 +25,8 @@ export default (state = INITIAL_STATE, action) => {
 //            console.log("in CAMPAIGN_CREATE_INIT:")
             return {...state, ...INITIAL_STATE};
         case CAMPAIGN_CREATE_SUCCESS:
-            console.log("in CAMPAIGN_CREATE_SUCCESS:", action.payload)
-            return {...state, ...INITIAL_STATE, newCampList:[...state.newCampList, action.payload]};
+//            console.log("in CAMPAIGN_CREATE_SUCCESS:", action.payload)
+            return {...state, ...INITIAL_STATE};
         case CAMPAIGN_EDIT_SUCCESS:
 //            console.log("in CAMPAIGN_EDIT_SUCCESS:", action.payload)
             return {...state, ...INITIAL_STATE};

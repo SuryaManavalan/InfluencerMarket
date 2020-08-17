@@ -44,7 +44,7 @@ class CampaignList extends Component {
           //console.log("check this####:",this.props.myCampList )
           docData = this.props.myCampList.documentData;
         }
-        console.log("in list new comp$$$$$$", this.props.newCampList);
+        //console.log("in list new comp$$$$$$", this.props.newCampList);
 
 //        console.log('before sending func:', this.props.campaignCatList)
         return (
@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
   });
 
 const mapStateToProps = (state) => {
-//    console.log("mapStateToProps camp list:", state.campaignListInfo);
+    console.log("mapStateToProps camp list:", state);
+//    console.log ("created camp:", state.campaignForm.createCamp)
     const  {myCampList} = state.campaignListInfo;
     const {newCampList} = state.campaignListInfo;
     var lastVisible = 0;
@@ -100,7 +101,7 @@ const mapStateToProps = (state) => {
       lastVisible = myCampList.lastVisible;
     const uid = state.auth.user.user.uid;
 //    console.log("list lastVisible :", lastVisible);
-    console.log("mapStateToProps newcamp list 2:", newCampList);
+//    console.log("mapStateToProps newcamp list 2:", newCampList);
 
      return{ myCampList, newCampList, uid, lastVisible  };
 
