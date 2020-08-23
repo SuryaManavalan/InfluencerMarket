@@ -128,7 +128,7 @@ class CampaignEdit extends Component {
 };
 
 const mapStateToProps = (state) => {
-    //console.log("mapStateToProps:", state);
+    console.log("EDIT *** mapStateToProps:", state);
     const {
         user,
         usertype,

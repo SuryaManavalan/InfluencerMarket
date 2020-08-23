@@ -63,7 +63,7 @@ const Header = ({ scene, previous, navigation }) => {
   );
 };
 
-export const StackNavigator = () => {
+export const InfluencerNav = () => {
   return (
    <Stack.Navigator
       initialRouteName="CampaignList"
@@ -76,7 +76,7 @@ export const StackNavigator = () => {
     >
       <Stack.Screen
         name="CampaignList"
-        component={CampaignList}
+        component={InfluencerHomePage}
         options={{ headerTitle: 'Influencer Home Page' }}
       />
       <Stack.Screen

@@ -10,5 +10,5 @@ export default combineReducers({
     campaignForm: CampaignFormReducer,
     categories: CategoryReducer,
     selectedCategoryId: selectedCategoryId,
-    campaignListInfo: CampaignListReducer
+//    campaignListInfo: CampaignListReducer
 });

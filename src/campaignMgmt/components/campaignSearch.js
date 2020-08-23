@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
 //    console.log("mapStateToProps camp search list:", state);
-    const  {campaignSearchList} = state.campaignListInfo;
+    const  {campaignSearchList} = state.campaignForm;
     console.log("mapStateToProps camp srch list2:", campaignSearchList);
 
      return{ campaignSearchList  };

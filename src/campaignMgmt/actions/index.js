@@ -4,7 +4,8 @@ import { Actions } from 'react-native-router-flux'
 import {
     CAMPAIGN_EDIT, CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE_SUCCESS,
     CAMPAIGN_CREATE_FAIL, MORE_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
-    CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT, CAMPAIGN_REGISTER
+    CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT, CAMPAIGN_REGISTER, NEW_CAMPAIGN_LIST_SUCCESS,
+    CAMPAIGN_DELETE_SUCCESS, REG_CAMPAIGN_LIST_SUCCESS
 } from '../types'
 
 
@@ -50,9 +51,9 @@ export  const campaignCatList= (uid, type, limit)=>{
 
         // console.log("query :", query);
 
-        var docRef = firestore().collection('campaigns').where('author_id', '==', uid)
+        var docRef = firestore().collection('campaigns')
         .orderBy('name').limit(limit)
-
+//.where('author_id', '==', uid)
              docRef.get().then(querySnapshot => {
                         const campList = [];
                             querySnapshot.forEach(documentSnapshot => {
@@ -133,9 +134,9 @@ export  const newCampaignList= (uid)=>{
     console.log("newCampaignList2",  uid);
 
      return (dispatch) => {
-        firestore().collection('campaigns').where('created_date', '>=', beginningDateObject)
-         .where('author_id', '==', uid).orderBy('created_date')
-            .onSnapshot(querySnapshot => {
+        // firestore().collection('campaigns').where('created_date', '>=', beginningDateObject)
+        //  .where('author_id', '==', uid).orderBy('created_date')
+         firestore().collection('campaigns').where('author_id', '==', uid).onSnapshot(querySnapshot => {
                 console.log("query snap for new:", querySnapshot)
                 const newCampaignList = [];
                 if(querySnapshot){
@@ -154,7 +155,29 @@ export  const newCampaignList= (uid)=>{
             };
     };
   
-
+    export  const myRegCampaignList= (uid)=>{
+    
+         return (dispatch) => {
+             firestore().collection('campaigns').where('registeredUsers', 'array-contains', uid)
+             .onSnapshot(querySnapshot => {
+                    console.log("query snap for reg:", querySnapshot)
+                    const regCampaignList = [];
+                    if(querySnapshot){
+                        querySnapshot.forEach(documentSnapshot => {
+                            console.log("reg camp - foreach:", documentSnapshot.data());
+                            regCampaignList.push({
+                                ...documentSnapshot.data(),
+                                key: documentSnapshot.id,
+                            });
+                        })
+                    }
+                        console.log("regCampaignList*******", regCampaignList);
+                    dispatch({type: REG_CAMPAIGN_LIST_SUCCESS,
+                        payload: regCampaignList});
+                    })
+                };
+        };
+      
 export const campaignCreateInit = () => {
     console.log("campaignCreateInit:************")
     return {
@@ -270,11 +293,16 @@ export const campaignEdit = ({ campaignKey, campaignName, campaignDesc, campaign
 export const campaignDelete = (campaignKey) => {
 
     console.log("***camp del :", campaignKey);
-    return () => {
+    return (dispatch) => {
         firestore().collection('campaigns').doc(campaignKey)
             .delete()
-            .then(() => {
+            .then(data => {
                 console.log("campaign del Success ");
+                dispatch({
+                    type: CAMPAIGN_DELETE_SUCCESS,
+                    payload: data
+                });
+            
                 RootNavigation.navigate('CampaignList');
             })
 
