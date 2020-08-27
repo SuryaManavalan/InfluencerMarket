@@ -63,7 +63,7 @@ const Header = ({ scene, previous, navigation }) => {
   );
 };
 
-export const StackNavigator = () => {
+export const SponsorNav = () => {
   return (
    <Stack.Navigator
       initialRouteName="CampaignList"

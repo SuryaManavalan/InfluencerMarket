@@ -82,7 +82,7 @@ export const InfluencerNav = () => {
       <Stack.Screen
         name="CampaignEdit"
         component={CampaignEdit}
-        options={{ headerTitle: 'Campaign Edit' }}
+        options={{ headerTitle: 'Campaign Register' }}
       />
     </Stack.Navigator>
   );
