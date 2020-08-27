@@ -36,7 +36,7 @@ export default (state = INITIAL_STATE, action) => {
 //            console.log("in CAMPAIGN_CREATE_SUCCESS:", action.payload)
             return {...state, ...INITIAL_STATE};
         case CAMPAIGN_EDIT_SUCCESS:
-//            console.log("in CAMPAIGN_EDIT_SUCCESS:", action.payload)
+            console.log("in CAMPAIGN_EDIT_SUCCESS:", action.payload)
             return {...state, ...INITIAL_STATE};
         case CAMPAIGN_DELETE_SUCCESS:
 //            console.log("in CAMPAIGN_DELETE_SUCCESS:", action.payload)

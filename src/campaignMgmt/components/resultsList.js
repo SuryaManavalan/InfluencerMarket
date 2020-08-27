@@ -20,7 +20,8 @@ class ResultsList extends PureComponent  {
         }
         
     render() {
-        return <View style={styles.container}>
+        if(this.props.scroll){
+            return <View style={styles.container}>
             <Text style={styles.titleStyle}>{this.props.title}</Text>
             <FlatList
                 horizontal={true}
@@ -51,8 +52,31 @@ class ResultsList extends PureComponent  {
             />
 
         </View>
+
+        }
+        else {
+            return <View style={styles.container}>
+            <Text style={styles.titleStyle}>{this.props.title}</Text>
+            <FlatList
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                data = {this.props.filteredResults}
+                renderItem={({item}) => {
+                    return (
+                        <TouchableOpacity >
+                            <ResultsDetail 
+                            result={item} 
+                            onPress={this.onCampaignPress.bind(this,  item)}/>
+                        </TouchableOpacity>
+                    )
+                }}
+            />
+
+        </View>
+
         }
     }
+}
 
 
 const styles = StyleSheet.create({

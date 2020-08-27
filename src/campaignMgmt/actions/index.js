@@ -12,7 +12,9 @@ import {
 export const campaignRegister = (uid, cid, preRegUsers) => {
     console.log("Registering for Campaign: ", cid)
     return (dispatch) => {
-        const userId = preRegUsers;
+        var userId = [];
+        if(preRegUsers)
+            userId = preRegUsers;
         userId.push(uid);
         firestore().collection('campaigns').doc(cid)
             .update({
@@ -74,7 +76,7 @@ export  const myCampaignList= (uid)=>{
         .orderBy('name')
         .where('author_id', '==', uid);
 
-        docRef.get().then(querySnapshot => {
+        docRef.onSnapshot(querySnapshot => {
             const myCampaigns = [];
                 querySnapshot.forEach(documentSnapshot => {
                     myCampaigns.push({
@@ -248,6 +250,7 @@ export const campaignEdit = ({ campaignKey, campaignName, campaignDesc, campaign
                 categoryName: campaignCategory
             })
             .then(data => {
+                console.log("CAMP EDIT DATA:", data);
                 dispatch({
                     type: CAMPAIGN_EDIT_SUCCESS,
                     payload: data

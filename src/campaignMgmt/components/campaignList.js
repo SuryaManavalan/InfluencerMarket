@@ -29,18 +29,17 @@ class CampaignList extends Component {
         return (
            <SafeAreaView style={styles.container}>
             <ResultsList lastVisible={this.props.lastVisible} filteredResults={this.props.myCampaigns}  
-              navigation={this.props.navigation} title="My Campaigns" 
-              moreListfunc={this.props.moreCampaignCatList}
-              uid={this.props.uid} type={MY_CAMPAIGNS} limit={100}
+              navigation={this.props.navigation} title="My Campaigns" scroll={false}
+              uid={this.props.uid} 
             />
             <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData} 
                 navigation={this.props.navigation} title="Other Campaigns" 
-                moreListfunc={this.props.moreCampaignCatList}
+                moreListfunc={this.props.moreCampaignCatList} scroll={true}
                 uid={this.props.uid} type={MY_CAMPAIGNS} limit={4}
             />
             <ResultsList lastVisible={this.props.lastVisible} filteredResults={docData}  
               navigation={this.props.navigation} title="Trending Campaigns" 
-              moreListfunc={this.props.moreCampaignCatList}
+              moreListfunc={this.props.moreCampaignCatList} scroll={true}
               uid={this.props.uid} type={MY_CAMPAIGNS} limit={4}
             />
             </SafeAreaView>
