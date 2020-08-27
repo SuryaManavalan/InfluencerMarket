@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux'
 import {
     CAMPAIGN_EDIT, CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE_SUCCESS,
     CAMPAIGN_CREATE_FAIL, MORE_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
-    CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT, CAMPAIGN_REGISTER, NEW_CAMPAIGN_LIST_SUCCESS,
+    CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT, CAMPAIGN_REGISTER, MY_CAMPAIGN_LIST_SUCCESS,
     CAMPAIGN_DELETE_SUCCESS, REG_CAMPAIGN_LIST_SUCCESS
 } from '../types'
 
@@ -39,18 +39,6 @@ export  const campaignCatList= (uid, type, limit)=>{
     console.log("Campaign Cat List");
 
     return (dispatch) => {
-        // const collection = firestore().collection('campaigns');
-        // var query;
-        // if(type === MY_CAMPAIGNS){
-        //     query = collection.where('author_id', '==', uid);
-        // }
-        // else {
-        //     query = collection.where('author_id', '!=', uid);
-        // }
-        // query.limit(limit);
-
-        // console.log("query :", query);
-
         var docRef = firestore().collection('campaigns')
         .orderBy('name').limit(limit)
 //.where('author_id', '==', uid)
@@ -64,17 +52,42 @@ export  const campaignCatList= (uid, type, limit)=>{
                             })
                             var lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
                             
-                            const myCampaigns = {
+                            const allCampaigns = {
                                 documentData: campList,
                                 lastVisible: lastVisible,
                                 loading: false,
                             }
 //                            console.log("Campaign Cat List3*******", myCampaigns);
                             dispatch({type: CAMPAIGN_LIST_SUCCESS,
-                                payload:  myCampaigns
+                                payload:  allCampaigns
                             });
 
                         })
+    };
+}
+
+export  const myCampaignList= (uid)=>{
+    console.log("My Campaign  List");
+
+    return (dispatch) => {
+        var docRef = firestore().collection('campaigns')
+        .orderBy('name')
+        .where('author_id', '==', uid);
+
+        docRef.get().then(querySnapshot => {
+            const myCampaigns = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    myCampaigns.push({
+                    ...documentSnapshot.data(),
+                    key: documentSnapshot.id,
+                    });
+                })
+    //           console.log("Campaign Cat List3*******", myCampaigns);
+            dispatch({type: MY_CAMPAIGN_LIST_SUCCESS,
+                payload:  myCampaigns
+            });
+
+        })
     };
 }
 
@@ -82,18 +95,6 @@ export const moreCampaignCatList = (uid, type, limit, lastVisible) => {
     console.log("Retrieve more Campaign Cat List", uid, type, limit, lastVisible);
 
     return (dispatch) => {
-        // const collection = firestore().collection('campaigns');
-        // var query;
-        // if(type === MY_CAMPAIGNS){
-        //     query = collection.where('author_id', '==', uid);
-        // }
-        // else {
-        //     query = collection.where('author_id', '!=', uid);
-        // }
-        // query.limit(limit);
-
-        // console.log("query :", query);
-
         const campList = [];
         try {
             var docRef = firestore().collection('campaigns').where('author_id', '==', uid)
@@ -126,35 +127,6 @@ export const moreCampaignCatList = (uid, type, limit, lastVisible) => {
     };
 }
 
-export  const newCampaignList= (uid)=>{
-    var beginningDate = Date.now() - 604800000;
-    var beginningDateObject = new Date(beginningDate);
-
-    console.log("newCampaignList", beginningDateObject);
-    console.log("newCampaignList2",  uid);
-
-     return (dispatch) => {
-        // firestore().collection('campaigns').where('created_date', '>=', beginningDateObject)
-        //  .where('author_id', '==', uid).orderBy('created_date')
-         firestore().collection('campaigns').where('author_id', '==', uid).onSnapshot(querySnapshot => {
-                console.log("query snap for new:", querySnapshot)
-                const newCampaignList = [];
-                if(querySnapshot){
-                    querySnapshot.forEach(documentSnapshot => {
-                        console.log("new camp - foreach:", documentSnapshot.data());
-                        newCampaignList.push({
-                            ...documentSnapshot.data(),
-                            key: documentSnapshot.id,
-                        });
-                    })
-                }
-                    console.log("newCampaignList*******", newCampaignList);
-                dispatch({type: NEW_CAMPAIGN_LIST_SUCCESS,
-                    payload: newCampaignList});
-                })
-            };
-    };
-  
     export  const myRegCampaignList= (uid)=>{
     
          return (dispatch) => {

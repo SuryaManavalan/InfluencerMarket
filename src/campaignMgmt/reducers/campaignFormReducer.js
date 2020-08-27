@@ -1,7 +1,7 @@
 import {CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE,  CAMPAIGN_CREATE_SUCCESS,
     CAMPAIGN_CREATE_FAIL, CAMPAIGN_CREATE_INIT, CAMPAIGN_REGISTER} from '../types';
 import {CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_FAIL, CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT,
-    MORE_CAMPAIGN_LIST_SUCCESS, NEW_CAMPAIGN_LIST_SUCCESS, REG_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_DELETE_SUCCESS} from '../types';
+    MORE_CAMPAIGN_LIST_SUCCESS, MY_CAMPAIGN_LIST_SUCCESS, REG_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_DELETE_SUCCESS} from '../types';
     
 //    import { act } from 'react-test-renderer';
 const LIST_INITIAL_STATE= { campaignListInfo: [] };
@@ -55,9 +55,9 @@ export default (state = INITIAL_STATE, action) => {
         case REG_CAMPAIGN_LIST_SUCCESS:
             console.log("in REG_CAMPAIGN_LIST_SUCCESS:", action.payload)
             return {...state, regCampaignList:action.payload   };
-        case NEW_CAMPAIGN_LIST_SUCCESS:
-            console.log("in NEW_CAMPAIGN_LIST_SUCCESS:", action.payload)
-            return {...state, newCampList:action.payload   };
+        case MY_CAMPAIGN_LIST_SUCCESS:
+            console.log("in MY_CAMPAIGN_LIST_SUCCESS:", action.payload)
+            return {...state, myCampaigns:action.payload   };
         case CAMPAIGN_LIST_SUCCESS:
 //            console.log("in CAMPAIGN_LIST_SUCCESS:", action.payload)
             return {...state, myCampList:action.payload   };
