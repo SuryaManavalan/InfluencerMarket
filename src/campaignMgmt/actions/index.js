@@ -25,7 +25,14 @@ export const campaignRegister = (uid, cid, preRegUsers) => {
                     type: CAMPAIGN_REGISTER,
                     payload: data
                 });
+                RootNavigation.navigate('CampaignList');
+                console.log("campaign register Success ");
+
+            })
+            .catch((error) => {
+                console.log("campaign Register failed : ", error);
             });
+
     };
 };
 
