@@ -4,14 +4,17 @@ import { Actions } from 'react-native-router-flux'
 import {
     CAMPAIGN_EDIT, CAMPAIGN_EDIT_SUCCESS, CAMPAIGN_UPDATE, CAMPAIGN_CREATE_SUCCESS,
     CAMPAIGN_CREATE_FAIL, MORE_CAMPAIGN_LIST_SUCCESS, CAMPAIGN_LIST_SUCCESS, CAMPAIGN_CREATE_INIT,
-    CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT, CAMPAIGN_REGISTER, NEW_CAMPAIGN_LIST_SUCCESS
+    CAMPAIGN_SEARCH_SUCCESS, CAMPAIGN_SEARCH_INIT, CAMPAIGN_REGISTER, MY_CAMPAIGN_LIST_SUCCESS,
+    CAMPAIGN_DELETE_SUCCESS, REG_CAMPAIGN_LIST_SUCCESS
 } from '../types'
 
 
 export const campaignRegister = (uid, cid, preRegUsers) => {
     console.log("Registering for Campaign: ", cid)
     return (dispatch) => {
-        const userId = preRegUsers;
+        var userId = [];
+        if(preRegUsers)
+            userId = preRegUsers;
         userId.push(uid);
         firestore().collection('campaigns').doc(cid)
             .update({
@@ -22,7 +25,14 @@ export const campaignRegister = (uid, cid, preRegUsers) => {
                     type: CAMPAIGN_REGISTER,
                     payload: data
                 });
+                RootNavigation.navigate('CampaignList');
+                console.log("campaign register Success ");
+
+            })
+            .catch((error) => {
+                console.log("campaign Register failed : ", error);
             });
+
     };
 };
 
@@ -38,21 +48,9 @@ export  const campaignCatList= (uid, type, limit)=>{
     console.log("Campaign Cat List");
 
     return (dispatch) => {
-        // const collection = firestore().collection('campaigns');
-        // var query;
-        // if(type === MY_CAMPAIGNS){
-        //     query = collection.where('author_id', '==', uid);
-        // }
-        // else {
-        //     query = collection.where('author_id', '!=', uid);
-        // }
-        // query.limit(limit);
-
-        // console.log("query :", query);
-
-        var docRef = firestore().collection('campaigns').where('author_id', '==', uid)
+        var docRef = firestore().collection('campaigns')
         .orderBy('name').limit(limit)
-
+//.where('author_id', '==', uid)
              docRef.get().then(querySnapshot => {
                         const campList = [];
                             querySnapshot.forEach(documentSnapshot => {
@@ -63,17 +61,42 @@ export  const campaignCatList= (uid, type, limit)=>{
                             })
                             var lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
                             
-                            const myCampaigns = {
+                            const allCampaigns = {
                                 documentData: campList,
                                 lastVisible: lastVisible,
                                 loading: false,
                             }
 //                            console.log("Campaign Cat List3*******", myCampaigns);
                             dispatch({type: CAMPAIGN_LIST_SUCCESS,
-                                payload:  myCampaigns
+                                payload:  allCampaigns
                             });
 
                         })
+    };
+}
+
+export  const myCampaignList= (uid)=>{
+    console.log("My Campaign  List");
+
+    return (dispatch) => {
+        var docRef = firestore().collection('campaigns')
+        .orderBy('name')
+        .where('author_id', '==', uid);
+
+        docRef.onSnapshot(querySnapshot => {
+            const myCampaigns = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    myCampaigns.push({
+                    ...documentSnapshot.data(),
+                    key: documentSnapshot.id,
+                    });
+                })
+    //           console.log("Campaign Cat List3*******", myCampaigns);
+            dispatch({type: MY_CAMPAIGN_LIST_SUCCESS,
+                payload:  myCampaigns
+            });
+
+        })
     };
 }
 
@@ -81,18 +104,6 @@ export const moreCampaignCatList = (uid, type, limit, lastVisible) => {
     console.log("Retrieve more Campaign Cat List", uid, type, limit, lastVisible);
 
     return (dispatch) => {
-        // const collection = firestore().collection('campaigns');
-        // var query;
-        // if(type === MY_CAMPAIGNS){
-        //     query = collection.where('author_id', '==', uid);
-        // }
-        // else {
-        //     query = collection.where('author_id', '!=', uid);
-        // }
-        // query.limit(limit);
-
-        // console.log("query :", query);
-
         const campList = [];
         try {
             var docRef = firestore().collection('campaigns').where('author_id', '==', uid)
@@ -125,36 +136,29 @@ export const moreCampaignCatList = (uid, type, limit, lastVisible) => {
     };
 }
 
-export  const newCampaignList= (uid)=>{
-    var beginningDate = Date.now() - 604800000;
-    var beginningDateObject = new Date(beginningDate);
-
-    console.log("newCampaignList", beginningDateObject);
-    console.log("newCampaignList2",  uid);
-
-     return (dispatch) => {
-        firestore().collection('campaigns').where('created_date', '>=', beginningDateObject)
-         .where('author_id', '==', uid).orderBy('created_date')
-            .onSnapshot(querySnapshot => {
-                console.log("query snap for new:", querySnapshot)
-                const newCampaignList = [];
-                if(querySnapshot){
-                    querySnapshot.forEach(documentSnapshot => {
-                        console.log("new camp - foreach:", documentSnapshot.data());
-                        newCampaignList.push({
-                            ...documentSnapshot.data(),
-                            key: documentSnapshot.id,
-                        });
+    export  const myRegCampaignList= (uid)=>{
+    
+         return (dispatch) => {
+             firestore().collection('campaigns').where('registeredUsers', 'array-contains', uid)
+             .onSnapshot(querySnapshot => {
+                    console.log("query snap for reg:", querySnapshot)
+                    const regCampaignList = [];
+                    if(querySnapshot){
+                        querySnapshot.forEach(documentSnapshot => {
+                            console.log("reg camp - foreach:", documentSnapshot.data());
+                            regCampaignList.push({
+                                ...documentSnapshot.data(),
+                                key: documentSnapshot.id,
+                            });
+                        })
+                    }
+                        console.log("regCampaignList*******", regCampaignList);
+                    dispatch({type: REG_CAMPAIGN_LIST_SUCCESS,
+                        payload: regCampaignList});
                     })
-                }
-                    console.log("newCampaignList*******", newCampaignList);
-                dispatch({type: NEW_CAMPAIGN_LIST_SUCCESS,
-                    payload: newCampaignList});
-                })
-            };
-    };
-  
-
+                };
+        };
+      
 export const campaignCreateInit = () => {
     console.log("campaignCreateInit:************")
     return {
@@ -253,6 +257,7 @@ export const campaignEdit = ({ campaignKey, campaignName, campaignDesc, campaign
                 categoryName: campaignCategory
             })
             .then(data => {
+                console.log("CAMP EDIT DATA:", data);
                 dispatch({
                     type: CAMPAIGN_EDIT_SUCCESS,
                     payload: data
@@ -270,11 +275,16 @@ export const campaignEdit = ({ campaignKey, campaignName, campaignDesc, campaign
 export const campaignDelete = (campaignKey) => {
 
     console.log("***camp del :", campaignKey);
-    return () => {
+    return (dispatch) => {
         firestore().collection('campaigns').doc(campaignKey)
             .delete()
-            .then(() => {
+            .then(data => {
                 console.log("campaign del Success ");
+                dispatch({
+                    type: CAMPAIGN_DELETE_SUCCESS,
+                    payload: data
+                });
+            
                 RootNavigation.navigate('CampaignList');
             })
 

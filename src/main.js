@@ -4,7 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginForm from './login/components/LoginForm'
 import SignupForm from './login/components/SignupForm'
-import {BottomTabs} from './bottomTab';
+import BottomTabs from './bottomTab';
 import {Profile} from './login/components/profile';
 import {connect} from 'react-redux';
 import  Influencer  from './login/components/influencer';

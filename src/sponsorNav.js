@@ -6,6 +6,7 @@ import {  Appbar, Avatar, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Feather';
 import CampaignEdit from './campaignMgmt/components/campaignEdit';
 import CampaignList from './campaignMgmt/components/campaignList';
+import InfluencerHomePage from './campaignMgmt/components/InfluencerHomePage';
 import LoginForm from './login/components/LoginForm'
 import SignupForm from './login/components/SignupForm'
 import {BottomTabs} from './bottomTab';
@@ -62,7 +63,7 @@ const Header = ({ scene, previous, navigation }) => {
   );
 };
 
-export const StackNavigator = () => {
+export const SponsorNav = () => {
   return (
    <Stack.Navigator
       initialRouteName="CampaignList"
@@ -76,7 +77,7 @@ export const StackNavigator = () => {
       <Stack.Screen
         name="CampaignList"
         component={CampaignList}
-        options={{ headerTitle: 'Campaign List' }}
+        options={{ headerTitle: 'Influencer Home Page' }}
       />
       <Stack.Screen
         name="CampaignEdit"
